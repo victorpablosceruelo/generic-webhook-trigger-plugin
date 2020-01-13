@@ -24,6 +24,26 @@ public final class JobFinder {
     JobFinder.jobFinderImpersonater = jobFinderImpersonater;
   }
 
+  public static List<FoundJob> findAllJobsWithName(final String jobName) {
+
+    final List<FoundJob> found = new ArrayList<>();
+
+    final boolean impersonate = false;
+    final List<ParameterizedJob> candidateProjects =
+        jobFinderImpersonater.getAllParameterizedJobs(impersonate);
+    for (final ParameterizedJob candidateJob : candidateProjects) {
+        String jobNameAux = candidateJob.getFullName();
+        if (jobName.equalsIgnoreCase(jobNameAux)) {
+            final GenericTrigger genericTriggerOpt = findGenericTrigger(candidateJob.getTriggers());
+            if (genericTriggerOpt != null) {
+                found.add(new FoundJob(candidateJob.getFullName(), genericTriggerOpt));
+            }
+        }
+    }
+
+    return found;
+  }
+  
   public static List<FoundJob> findAllJobsWithTrigger(final String givenToken) {
 
     final List<FoundJob> found = new ArrayList<>();
