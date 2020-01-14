@@ -20,11 +20,18 @@
      <p>
       If your job <b>is not parameterized</b>, then the resolved variables will just be contributed to the build. If your job <b>is parameterized</b>, and you resolve variables that have the same name as those parameters, then the plugin will populate the parameters when triggering job. That means you can, for example, use the parameters in combination with an SCM plugin, like GIT Plugin, to pick a branch.
      </p>
+     <p>
+         Variable: Name of variable <br/>
+         Expression: Expression to evaluate in POST content. Use <a href="https://github.com/jayway/JsonPath">JSONPath</a> for JSON or <a href="https://www.w3schools.com/xml/xpath_syntax.asp">XPath</a> for XML. <br/>
+         <br/>
+         
+     </p>
     </div>
    </f:description>
    
+ <j:invokeStatic var="genericVariablesIn" className="org.jenkinsci.plugins.gwt.GenericTrigger" method="getDefaultGenericVariables" />
  <f:entry title="Post content parameters" field="genericVariables">
-  <f:repeatableProperty field="genericVariables"  minimum="0" />  
+  <f:repeatableProperty field="genericVariables"  minimum="0" default="${genericVariablesIn}"/>  
    <f:description>
     If you want value of <b>param1</b> from post content <code>{ "param1": "value1" }</code> to be contributed, you need to add <b>$.param1</b> here.
    </f:description>
@@ -44,18 +51,6 @@
    </f:description>
  </f:entry>
  
- <f:entry title="Token">
-   <f:textbox field="token"/>
-   <f:description>
-    Optional token. If it is specified then this job can only be triggered if that token is supplied when invoking <b>http://JENKINS_URL/generic-webhook-trigger/invoke</b>. It can be supplied as a:
-    <ul>
-     <li>Query parameter <b>/invoke?token=TOKEN_HERE</b></li>
-     <li>A token header <b>token: TOKEN_HERE</b></li>
-     <li>A Authorization: Bearer header <b>Authorization: Bearer TOKEN_HERE</b></li>
-    </ul>
-   </f:description>
- </f:entry>
-
  <f:entry title="Cause">
    <f:textbox field="causeString" default="Generic Cause"/>
    <f:description>
@@ -71,14 +66,14 @@
  </f:entry>
 
  <f:entry title="Print post content" field="printPostContent">
-   <f:checkbox/>
+   <f:checkbox default='true' />
    <f:description>
     Print post content in job log.
    </f:description>
  </f:entry>
 
  <f:entry title="Print contributed variables" field="printContributedVariables">
-   <f:checkbox/>
+   <f:checkbox default='true' />
    <f:description>
     Print contributed variables in job log.
    </f:description>

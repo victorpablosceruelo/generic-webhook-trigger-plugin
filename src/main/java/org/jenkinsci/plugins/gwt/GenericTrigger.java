@@ -60,55 +60,65 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
       final String regexpFilterExpression,
       final List<GenericRequestVariable> genericRequestVariables,
       final List<GenericHeaderVariable> genericHeaderVariables) {
-    this.genericVariables = addDefaultGenericVariables(genericVariablesIn);
+    // this.genericVariables = addDefaultGenericVariables(genericVariablesIn);
+    this.genericVariables = genericVariablesIn;
     this.regexpFilterExpression = regexpFilterExpression;
     this.regexpFilterText = regexpFilterText;
     this.genericRequestVariables = genericRequestVariables;
     this.genericHeaderVariables = genericHeaderVariables;
   }
 
-  private static List<GenericVariable> addDefaultGenericVariables(List<GenericVariable> genericVariables) {
-
-      final List<GenericVariable> toAdd = getDefaultVariables();
-      final List<String> genericVariablesKeys = getKeys(genericVariables);
-      
-      for (GenericVariable varToAdd : toAdd) {
-          String toAddKey = varToAdd.getVariableName();
-          if (! genericVariablesKeys.contains(toAddKey)) {
-              genericVariables.add(varToAdd);
-          }
-      }
-      return genericVariables;
+  public static List<GenericVariable> getDefaultGenericVariables() {
+    List<GenericVariable> genericVariables = new ArrayList<GenericVariable>();
+    return addDefaultGenericVariables(genericVariables);
   }
 
-  
+  private static List<GenericVariable> addDefaultGenericVariables(
+      List<GenericVariable> genericVariables) {
+
+    final List<GenericVariable> toAdd = getDefaultVariables();
+    final List<String> genericVariablesKeys = getKeys(genericVariables);
+
+    for (GenericVariable varToAdd : toAdd) {
+      String toAddKey = varToAdd.getVariableName();
+      if (!genericVariablesKeys.contains(toAddKey)) {
+        genericVariables.add(varToAdd);
+      }
+    }
+    return genericVariables;
+  }
+
   private static List<String> getKeys(List<GenericVariable> genericVariablesList) {
-      List<String> listOut = new ArrayList<String>();
+    List<String> listOut = new ArrayList<String>();
+    if (null != genericVariablesList) {
       for (GenericVariable var : genericVariablesList) {
-          listOut.add(var.getVariableName());
+        listOut.add(var.getVariableName());
       }
-      return listOut;
+    }
+    return listOut;
   }
-  
+
   private static List<GenericVariable> getDefaultVariables() {
-      List<GenericVariable> toAdd = new ArrayList<GenericVariable>();
-      toAdd.add(new GenericVariable("project", "$.project"));
-      toAdd.add(new GenericVariable("object_kind", "$.object_kind"));
-      toAdd.add(new GenericVariable("source_branch", "$.object_attributes.source_branch"));
-      toAdd.add(new GenericVariable("target_branch", "$.object_attributes.target_branch"));
-      toAdd.add(new GenericVariable("merge_status", "$.object_attributes.merge_status"));
-      toAdd.add(new GenericVariable("project_name", "$.object_attributes.source.name"));
-      toAdd.add(new GenericVariable("project_namespace", "$.object_attributes.source.namespace"));
-      toAdd.add(new GenericVariable("project_path_namespace", "$.object_attributes.source.path_with_namespace"));
-      toAdd.add(new GenericVariable("target_url", "$.object_attributes.target.git_http_url"));
-      toAdd.add(new GenericVariable("source_url", "$.object_attributes.source.git_http_url"));
-      toAdd.add(new GenericVariable("result_gitlab_url", "$.object_attributes.url"));
-      toAdd.add(new GenericVariable("state_merge", "$.object_attributes.state"));
-      toAdd.add(new GenericVariable("project_id", "$.project.id"));
-      toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
-      return toAdd;
+    List<GenericVariable> toAdd = new ArrayList<GenericVariable>();
+    toAdd.add(new GenericVariable("project", "$.project"));
+    toAdd.add(new GenericVariable("object_kind", "$.object_kind"));
+    toAdd.add(new GenericVariable("source_branch", "$.object_attributes.source_branch"));
+    toAdd.add(new GenericVariable("target_branch", "$.object_attributes.target_branch"));
+    toAdd.add(new GenericVariable("merge_status", "$.object_attributes.merge_status"));
+    toAdd.add(new GenericVariable("project_name", "$.object_attributes.source.name"));
+    toAdd.add(new GenericVariable("project_namespace", "$.object_attributes.source.namespace"));
+    toAdd.add(
+        new GenericVariable(
+            "project_path_namespace", "$.object_attributes.source.path_with_namespace"));
+    toAdd.add(new GenericVariable("target_url", "$.object_attributes.target.git_http_url"));
+    toAdd.add(new GenericVariable("source_url", "$.object_attributes.source.git_http_url"));
+    toAdd.add(new GenericVariable("result_gitlab_url", "$.object_attributes.url"));
+    toAdd.add(new GenericVariable("state_merge", "$.object_attributes.state"));
+    toAdd.add(new GenericVariable("project_id", "$.project.id"));
+    toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
+    return toAdd;
   }
-  
+
   @DataBoundSetter
   public void setCauseString(final String causeString) {
     this.causeString = causeString;
