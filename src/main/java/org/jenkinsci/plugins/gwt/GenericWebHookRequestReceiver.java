@@ -32,13 +32,17 @@ import org.kohsuke.stapler.StaplerRequest;
 @Extension
 public class GenericWebHookRequestReceiver extends CrumbExclusion implements UnprotectedRootAction {
 
+    
+  private static final String URL_NAME = "my-gitlab-webhook-trigger";
+  
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
           + GenericTrigger.class.getSimpleName()
           + " configured! "
           + "If you are using a token, you need to pass it like ...trigger/invoke?token=TOKENHERE. "
-          + "If you are not using a token, you need to authenticate like http://user:passsword@jenkins/generic-webhook... ";
-  private static final String URL_NAME = "generic-webhook-trigger";
+          + "If you are not using a token, you need to authenticate like http://user:passsword@jenkins/"
+          + URL_NAME + "... ";
+  
   private static final Logger LOGGER =
       Logger.getLogger(GenericWebHookRequestReceiver.class.getName());
 
