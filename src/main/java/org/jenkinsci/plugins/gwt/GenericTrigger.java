@@ -175,7 +175,8 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
   public GenericTriggerResults trigger(
       final Map<String, List<String>> headers,
       final Map<String, String[]> parameterMap,
-      final String postContent) {
+      final String postContent,
+      final String jobFullName) {
     final Map<String, String> resolvedVariables =
         new VariablesResolver(
                 headers,
@@ -198,21 +199,68 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
 
     hudson.model.Queue.Item item = null;
     if (isMatching) {
-      final String cause = renderText(causeString, resolvedVariables);
-      final GenericCause genericCause =
-          new GenericCause(
-              postContent, resolvedVariables, printContributedVariables, printPostContent, cause);
-      final ParametersDefinitionProperty parametersDefinitionProperty =
-          job.getProperty(ParametersDefinitionProperty.class);
-      final ParametersAction parameters =
-          createParameterAction(parametersDefinitionProperty, resolvedVariables);
-      item =
-          retrieveScheduleJob(job) //
-              .scheduleBuild2(
-                  job, RESPECT_JOBS_QUIET_PERIOD, new CauseAction(genericCause), parameters);
+      if (resolvedVariablesValuesAreValid(resolvedVariables, jobFullName)) {
+        item = triggerJobAux(resolvedVariables, postContent);
+      }
     }
     return new GenericTriggerResults(
         item, resolvedVariables, renderedRegexpFilterText, regexpFilterExpression);
+  }
+
+  private boolean resolvedVariablesValuesAreValid(
+      Map<String, String> resolvedVariables, String jobFullName) {
+    if (!valueForKeyIs("object_kind", "merge_request", resolvedVariables)) {
+      return false;
+    }
+    if (!valueForKeyIs("project_path_with_namespace", jobFullName, resolvedVariables)) {
+      return false;
+    }
+    return true;
+  }
+
+  private boolean valueForKeyIs(String key, String value, Map<String, String> resolvedVariables) {
+    String currentValue = resolvedVariables.get(key);
+    if (currentValue == null) {
+      if (value != null) {
+        logValueIsNotTheExpectedOne(key, value, currentValue);
+        return false;
+      }
+      return true;
+    }
+
+    if (currentValue.equals(value)) {
+      return true;
+    }
+
+    logValueIsNotTheExpectedOne(key, value, currentValue);
+    return false;
+  }
+
+  private void logValueIsNotTheExpectedOne(String key, String value, String currentValue) {
+    StringBuilder sbMsg = new StringBuilder();
+    sbMsg.append("Expected value for key ");
+    sbMsg.append(key).append(" is ");
+    sbMsg.append(value).append(", not ").append(currentValue);
+    LOGGER.log(Level.WARNING, sbMsg.toString());
+  }
+
+  public hudson.model.Queue.Item triggerJobAux(
+      Map<String, String> resolvedVariables, String postContent) {
+    hudson.model.Queue.Item item = null;
+
+    final String cause = renderText(causeString, resolvedVariables);
+    final GenericCause genericCause =
+        new GenericCause(
+            postContent, resolvedVariables, printContributedVariables, printPostContent, cause);
+    final ParametersDefinitionProperty parametersDefinitionProperty =
+        job.getProperty(ParametersDefinitionProperty.class);
+    final ParametersAction parameters =
+        createParameterAction(parametersDefinitionProperty, resolvedVariables);
+    item =
+        retrieveScheduleJob(job) //
+            .scheduleBuild2(
+                job, RESPECT_JOBS_QUIET_PERIOD, new CauseAction(genericCause), parameters);
+    return item;
   }
 
   @SuppressWarnings("rawtypes")

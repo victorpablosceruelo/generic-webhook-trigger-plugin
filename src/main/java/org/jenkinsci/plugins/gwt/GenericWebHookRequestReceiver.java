@@ -113,13 +113,8 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       final String postContent,
       final String givenToken) {
 
-    // Step 1: check request is a merge request.
-    // Step 2: check git branches names are valid
-
-    // Step 3: get jobs with valid name.
     final List<FoundJob> foundJobs = JobFinder.findAllJobsWithTrigger(givenToken);
 
-    // Step 4: run jobs.
     return invokeJobs(foundJobs, headers, parameterMap, postContent);
   }
 
@@ -128,6 +123,8 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       Map<String, List<String>> headers,
       Map<String, String[]> parameterMap,
       String postContent) {
+
+    LOGGER.log(Level.INFO, "Post content:\n" + postContent + "\n");
 
     final Map<String, Object> triggerResultsMap = new HashMap<>();
     boolean allSilent = true;
@@ -138,7 +135,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
         LOGGER.log(FINE, " with:\n\n" + postContent + "\n\n");
         final GenericTrigger genericTrigger = foundJob.getGenericTrigger();
         final GenericTriggerResults triggerResults =
-            genericTrigger.trigger(headers, parameterMap, postContent);
+            genericTrigger.trigger(headers, parameterMap, postContent, foundJob.getFullName());
         if (!genericTrigger.isSilentResponse()) {
           allSilent = false;
           triggerResultsMap.put(foundJob.getFullName(), triggerResults);
