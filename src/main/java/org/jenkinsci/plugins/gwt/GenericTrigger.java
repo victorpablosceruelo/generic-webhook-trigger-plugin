@@ -53,7 +53,7 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
 
     @Override
     public String getDisplayName() {
-      return "Generic Webhook Trigger";
+      return "GitLab Ad-Hoc Webhook Trigger";
     }
   }
 

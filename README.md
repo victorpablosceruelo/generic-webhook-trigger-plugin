@@ -1,4 +1,4 @@
-# Generic Webhook Trigger Plugin
+# Gitlab Ad-Hoc Webhook Trigger Plugin
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/generic-webhook-trigger-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/generic-webhook-trigger-plugin)
 
