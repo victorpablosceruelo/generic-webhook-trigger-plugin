@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
 import org.jenkinsci.plugins.gwt.FoundJob;
-import org.jenkinsci.plugins.gwt.GenericTrigger;
+import org.jenkinsci.plugins.gwt.GitlabAdHocTrigger;
 
 public final class JobFinder {
 
@@ -32,11 +32,10 @@ public final class JobFinder {
     final List<ParameterizedJob> candidateProjects =
         jobFinderImpersonater.getAllParameterizedJobs(impersonate);
     for (final ParameterizedJob candidateJob : candidateProjects) {
-      final GenericTrigger genericTriggerOpt = findGenericTrigger(candidateJob.getTriggers());
-      if (genericTriggerOpt != null) {
-        if (authenticationTokenMatches(
-            givenToken, candidateJob.getAuthToken(), genericTriggerOpt.getToken())) {
-          found.add(new FoundJob(candidateJob.getFullName(), genericTriggerOpt));
+      final GitlabAdHocTrigger candidateJobTrigger = findTrigger(candidateJob.getTriggers());
+      if (candidateJobTrigger != null) {
+        if (authenticationTokenMatches(givenToken, candidateJob.getAuthToken(), candidateJobTrigger.getToken())) {
+          found.add(new FoundJob(candidateJob.getFullName(), candidateJobTrigger));
         }
       }
     }
@@ -93,14 +92,13 @@ public final class JobFinder {
     return authToken != null && !isNullOrEmpty(authToken.getToken());
   }
 
-  private static GenericTrigger findGenericTrigger(
-      final Map<TriggerDescriptor, Trigger<?>> triggers) {
+  private static GitlabAdHocTrigger findTrigger(final Map<TriggerDescriptor, Trigger<?>> triggers) {
     if (triggers == null) {
       return null;
     }
     for (final Trigger<?> candidate : triggers.values()) {
-      if (candidate instanceof GenericTrigger) {
-        return (GenericTrigger) candidate;
+      if (candidate instanceof GitlabAdHocTrigger) {
+        return (GitlabAdHocTrigger) candidate;
       }
     }
     return null;

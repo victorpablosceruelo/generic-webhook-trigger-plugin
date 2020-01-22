@@ -3,15 +3,15 @@ package org.jenkinsci.plugins.gwt;
 public class FoundJob {
 
   private final String fullName;
-  private final GenericTrigger genericTrigger;
+  private final GitlabAdHocTrigger gitlabAdHocTrigger;
 
-  public FoundJob(String fullName, GenericTrigger genericTrigger) {
+  public FoundJob(String fullName, GitlabAdHocTrigger gitlabAdHocTrigger) {
     this.fullName = fullName;
-    this.genericTrigger = genericTrigger;
+    this.gitlabAdHocTrigger = gitlabAdHocTrigger;
   }
 
-  public GenericTrigger getGenericTrigger() {
-    return genericTrigger;
+  public GitlabAdHocTrigger getGitlabAdHocTrigger() {
+    return gitlabAdHocTrigger;
   }
 
   public String getFullName() {

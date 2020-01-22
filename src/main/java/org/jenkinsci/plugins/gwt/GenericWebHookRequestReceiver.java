@@ -36,7 +36,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
-          + GenericTrigger.class.getSimpleName()
+          + GitlabAdHocTrigger.class.getSimpleName()
           + " configured! "
           + "If you are using a token, you need to pass it like ...trigger/invoke?token=TOKENHERE. "
           + "If you are not using a token, you need to authenticate like http://user:passsword@jenkins/"
@@ -133,10 +133,10 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       try {
         LOGGER.log(FINE, "Triggering " + foundJob.getFullName());
         LOGGER.log(FINE, " with:\n\n" + postContent + "\n\n");
-        final GenericTrigger genericTrigger = foundJob.getGenericTrigger();
+        final GitlabAdHocTrigger trigger = foundJob.getGitlabAdHocTrigger();
         final GenericTriggerResults triggerResults =
-            genericTrigger.trigger(headers, parameterMap, postContent, foundJob.getFullName());
-        if (!genericTrigger.isSilentResponse()) {
+            trigger.trigger(headers, parameterMap, postContent, foundJob.getFullName());
+        if (!trigger.isSilentResponse()) {
           allSilent = false;
           triggerResultsMap.put(foundJob.getFullName(), triggerResults);
         }

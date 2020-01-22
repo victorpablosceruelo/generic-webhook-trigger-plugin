@@ -10,7 +10,7 @@ properties([
     booleanParam(name: 'DEBUG', defaultValue: new Boolean(false)),
   ]),
   pipelineTriggers([
-    [$class: 'GenericTrigger',
+    [$class: 'GitlabAdHocTrigger',
      genericVariables: [
       [expressionType: 'JSONPath', key: 'APP_ID', value: '$.app_id', defaultValue: ''],
       [expressionType: 'JSONPath', key: 'APP_ENV', value: '$.app_env', defaultValue: ''],

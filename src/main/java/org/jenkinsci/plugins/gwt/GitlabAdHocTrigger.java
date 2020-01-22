@@ -25,7 +25,7 @@ import org.jenkinsci.plugins.gwt.resolvers.VariablesResolver;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
-public class GenericTrigger extends Trigger<Job<?, ?>> {
+public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
   /** A value of -1 will make sure the quiet period of the job will be used. */
   private static final int RESPECT_JOBS_QUIET_PERIOD = -1;
@@ -41,9 +41,9 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
   private String token;
   private boolean silentResponse;
 
-  private static final Logger LOGGER = Logger.getLogger(GenericTrigger.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(GitlabAdHocTrigger.class.getName());
 
-  @Symbol("GenericTrigger")
+  @Symbol("GitlabAdHocTrigger")
   public static class GenericDescriptor extends TriggerDescriptor {
 
     @Override
@@ -58,7 +58,7 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
   }
 
   @DataBoundConstructor
-  public GenericTrigger(
+  public GitlabAdHocTrigger(
       final List<GenericVariable> genericVariables,
       final String regexpFilterText,
       final String regexpFilterExpression,
@@ -295,7 +295,7 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
 
   @Override
   public String toString() {
-    return "GenericTrigger [genericVariables="
+    return "GitlabAdHocTrigger [genericVariables="
         + genericVariables
         + ", regexpFilterText="
         + regexpFilterText

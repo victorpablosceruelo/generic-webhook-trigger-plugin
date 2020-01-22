@@ -151,7 +151,7 @@ pipelineJob('Generic Job Example') {
  }
 
  triggers {
-  genericTrigger {
+  gitlabAdHocTrigger {
    genericVariables {
     genericVariable {
      key("VARIABLE_FROM_POST")
@@ -220,7 +220,7 @@ You can use the credentials plugin to provide the `token` from credentials.
 withCredentials([string(credentialsId: 'mycredentialsid', variable: 'credentialsVariable')]) {
  properties([
   pipelineTriggers([
-   [$class: 'GenericTrigger',
+   [$class: 'GitlabAdHocTrigger',
     ...
     token: credentialsVariable,
     ...
@@ -235,7 +235,7 @@ Perhaps you want a different `token` for each job.
 ```groovy
  properties([
   pipelineTriggers([
-   [$class: 'GenericTrigger',
+   [$class: 'GitlabAdHocTrigger',
     ...
     token: env.JOB_NAME,
     ...
@@ -250,7 +250,7 @@ Or have a credentials string prefixed with the job name.
 withCredentials([string(credentialsId: 'mycredentialsid', variable: 'credentialsVariable')]) {
  properties([
   pipelineTriggers([
-   [$class: 'GenericTrigger',
+   [$class: 'GitlabAdHocTrigger',
     ...
     token: env.JOB_NAME + credentialsVariable,
     ...
@@ -266,7 +266,7 @@ With a scripted Jenkinsfile like this:
 node {
  properties([
   pipelineTriggers([
-   [$class: 'GenericTrigger',
+   [$class: 'GitlabAdHocTrigger',
     genericVariables: [
      [key: 'ref', value: '$.ref'],
      [
@@ -321,7 +321,7 @@ With a declarative Jenkinsfile like this:
 pipeline {
   agent any
   triggers {
-    GenericTrigger(
+    GitlabAdHocTrigger(
      genericVariables: [
       [key: 'ref', value: '$.ref']
      ],

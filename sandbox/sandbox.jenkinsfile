@@ -5,7 +5,7 @@ node {
  def jobName = env.JOB_NAME.split("/")[1]
  properties([
   pipelineTriggers([
-   [$class: 'GenericTrigger',
+   [$class: 'GitlabAdHocTrigger',
     genericVariables: [
      [expressionType: 'JSONPath', key: 'reference', value: '$.ref'],
      [

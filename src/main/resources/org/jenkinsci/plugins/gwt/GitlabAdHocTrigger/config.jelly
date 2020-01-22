@@ -29,7 +29,7 @@
     </div>
    </f:description>
    
- <j:invokeStatic var="genericVariablesIn" className="org.jenkinsci.plugins.gwt.GenericTrigger" method="getDefaultGenericVariables" />
+ <j:invokeStatic var="genericVariablesIn" className="org.jenkinsci.plugins.gwt.GitlabAdHocTrigger" method="getDefaultGenericVariables" />
  <f:entry title="Post content parameters" field="genericVariables">
   <f:repeatableProperty field="genericVariables"  minimum="0" default="${genericVariablesIn}"/>  
    <f:description>

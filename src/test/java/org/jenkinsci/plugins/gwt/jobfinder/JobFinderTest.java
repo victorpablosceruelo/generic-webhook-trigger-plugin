@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
 import org.jenkinsci.plugins.gwt.FoundJob;
-import org.jenkinsci.plugins.gwt.GenericTrigger;
+import org.jenkinsci.plugins.gwt.GitlabAdHocTrigger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,7 +61,7 @@ public class JobFinderTest {
         .thenReturn("name-" + atomicInteger.incrementAndGet());
     final Map<TriggerDescriptor, Trigger<?>> triggers = new HashMap<>();
     final TriggerDescriptor typeDescr = mock(TriggerDescriptor.class);
-    final GenericTrigger genericTrigger = new GenericTrigger(null, null, null, null, null);
+    final GitlabAdHocTrigger genericTrigger = new GitlabAdHocTrigger(null, null, null, null, null);
     genericTrigger.setToken(genericToken);
     triggers.put(typeDescr, genericTrigger);
     when(mock.getTriggers()) //
