@@ -17,6 +17,8 @@ import hudson.triggers.TriggerDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jenkins.model.ParameterizedJobMixIn;
 import org.jenkinsci.Symbol;
 import org.jenkinsci.plugins.gwt.resolvers.VariablesResolver;
@@ -39,6 +41,8 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
   private String token;
   private boolean silentResponse;
 
+  private static final Logger LOGGER = Logger.getLogger(GenericTrigger.class.getName());
+
   @Symbol("GenericTrigger")
   public static class GenericDescriptor extends TriggerDescriptor {
 
@@ -55,13 +59,13 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
 
   @DataBoundConstructor
   public GenericTrigger(
-      final List<GenericVariable> genericVariablesIn,
+      final List<GenericVariable> genericVariables,
       final String regexpFilterText,
       final String regexpFilterExpression,
       final List<GenericRequestVariable> genericRequestVariables,
       final List<GenericHeaderVariable> genericHeaderVariables) {
     // this.genericVariables = addDefaultGenericVariables(genericVariablesIn);
-    this.genericVariables = genericVariablesIn;
+    this.genericVariables = genericVariables;
     this.regexpFilterExpression = regexpFilterExpression;
     this.regexpFilterText = regexpFilterText;
     this.genericRequestVariables = genericRequestVariables;
@@ -181,6 +185,13 @@ public class GenericTrigger extends Trigger<Job<?, ?>> {
                 genericRequestVariables,
                 genericHeaderVariables)
             .getVariables();
+
+    StringBuilder sbMsg = new StringBuilder();
+    for (Map.Entry<String, String> resolvedVariable : resolvedVariables.entrySet()) {
+      sbMsg.append("\n").append("Var value: ").append(resolvedVariable.getKey());
+      sbMsg.append(" -> ").append(resolvedVariable.getValue()).append(" ");
+    }
+    LOGGER.log(Level.INFO, sbMsg.toString());
 
     final String renderedRegexpFilterText = renderText(regexpFilterText, resolvedVariables);
     final boolean isMatching = isMatching(renderedRegexpFilterText, regexpFilterExpression);

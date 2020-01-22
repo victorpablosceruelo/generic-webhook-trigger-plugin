@@ -26,11 +26,18 @@ public final class JobFinder {
 
   public static List<FoundJob> findAllJobsWithName(final String jobName) {
 
-    final List<FoundJob> found = new ArrayList<>();
-
     final boolean impersonate = false;
     final List<ParameterizedJob> candidateProjects =
         jobFinderImpersonater.getAllParameterizedJobs(impersonate);
+
+    return filterOutJobsWithoutName(jobName, candidateProjects);
+  }
+
+  public static List<FoundJob> filterOutJobsWithoutName(
+      final String jobName, final List<ParameterizedJob> candidateProjects) {
+
+    final List<FoundJob> found = new ArrayList<>();
+
     for (final ParameterizedJob candidateJob : candidateProjects) {
       String jobNameAux = candidateJob.getFullName();
       if (jobName.equalsIgnoreCase(jobNameAux)) {
@@ -40,7 +47,6 @@ public final class JobFinder {
         }
       }
     }
-
     return found;
   }
 

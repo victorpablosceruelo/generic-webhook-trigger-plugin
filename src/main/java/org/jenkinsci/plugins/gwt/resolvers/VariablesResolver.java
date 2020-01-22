@@ -48,14 +48,20 @@ public class VariablesResolver {
 
   public Map<String, String> getVariables() {
     final Map<String, String> resolvedVariables = new TreeMap<>();
-    resolvedVariables.putAll(
-        requestHeaderResolver.getRequestHeaders(configuredGenericHeaderVariables, incomingHeaders));
-    resolvedVariables.putAll(
+    Map<String, String> resolvedVariablesTmp = null;
+
+    resolvedVariablesTmp =
+        requestHeaderResolver.getRequestHeaders(configuredGenericHeaderVariables, incomingHeaders);
+    resolvedVariables.putAll(resolvedVariablesTmp);
+    resolvedVariablesTmp =
         requestParameterResolver.getRequestParameters(
-            configuredGenericRequestVariables, incomingParameterMap));
-    resolvedVariables.putAll(
+            configuredGenericRequestVariables, incomingParameterMap);
+    resolvedVariables.putAll(resolvedVariablesTmp);
+    resolvedVariablesTmp =
         postContentParameterResolver.getPostContentParameters(
-            configuredGenericVariables, incomingPostContent));
+            configuredGenericVariables, incomingPostContent);
+    resolvedVariables.putAll(resolvedVariablesTmp);
+
     return resolvedVariables;
   }
 }
