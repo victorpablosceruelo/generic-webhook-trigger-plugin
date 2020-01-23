@@ -191,4 +191,5 @@ cat > /tmp/example.json <<EOF
 
 EOF
 
-curl -H "Content-Type: application/json" --data @/tmp/example.json ${URL}
+curl --insecure -H "Content-Type: application/json" --data @/tmp/example.json ${URL}
+echo "RetVal: $?"
