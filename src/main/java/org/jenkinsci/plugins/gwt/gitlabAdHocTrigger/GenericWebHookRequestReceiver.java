@@ -34,13 +34,15 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
   private static final String URL_NAME = "my-gitlab-webhook-trigger";
 
+  private static final String FULL_URL_NAME = "http://user:passsword@jenkins/" + URL_NAME;
+
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
           + GitlabAdHocTrigger.class.getSimpleName()
           + " configured! "
           + "If you are using a token, you need to pass it like ...trigger/invoke?token=TOKENHERE. "
-          + "If you are not using a token, you need to authenticate like http://user:passsword@jenkins/"
-          + URL_NAME
+          + "If you are not using a token, you need to authenticate like "
+          + FULL_URL_NAME
           + "... ";
 
   private static final Logger LOGGER =
@@ -124,7 +126,8 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       Map<String, String[]> parameterMap,
       String postContent) {
 
-    LOGGER.log(Level.INFO, "Post content:\n" + postContent + "\n");
+    LOGGER.log(
+        Level.INFO, "Received request at " + FULL_URL_NAME + " with post content:\n" + postContent);
 
     final Map<String, Object> triggerResultsMap = new HashMap<>();
     boolean allSilent = true;
@@ -193,6 +196,10 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
   @Override
   public String getUrlName() {
+    return URL_NAME;
+  }
+
+  public static String getUrl() {
     return URL_NAME;
   }
 

@@ -43,6 +43,18 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
   private static final Logger LOGGER = Logger.getLogger(GitlabAdHocTrigger.class.getName());
 
+  private void logJobTriggeredWithParams(
+      String jobFullName, final Map<String, String> resolvedVariables) {
+    StringBuilder sbMsg = new StringBuilder();
+    sbMsg.append("Triggering job ").append(jobFullName).append(" with variables: \n");
+
+    for (Map.Entry<String, String> resolvedVariable : resolvedVariables.entrySet()) {
+      sbMsg.append(resolvedVariable.getKey());
+      sbMsg.append(":").append(resolvedVariable.getValue()).append("; ");
+    }
+    LOGGER.log(Level.INFO, sbMsg.toString());
+  }
+
   @Symbol("GitlabAdHocTrigger")
   public static class GenericDescriptor extends TriggerDescriptor {
 
@@ -157,19 +169,13 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
                 genericHeaderVariables)
             .getVariables();
 
-    StringBuilder sbMsg = new StringBuilder();
-    for (Map.Entry<String, String> resolvedVariable : resolvedVariables.entrySet()) {
-      sbMsg.append("\n").append("Var value: ").append(resolvedVariable.getKey());
-      sbMsg.append(" -> ").append(resolvedVariable.getValue()).append(" ");
-    }
-    LOGGER.log(Level.INFO, sbMsg.toString());
-
     final String renderedRegexpFilterText = renderText(regexpFilterText, resolvedVariables);
     final boolean isMatching = isMatching(renderedRegexpFilterText, regexpFilterExpression);
 
     hudson.model.Queue.Item item = null;
     if (isMatching) {
       if (resolvedVariablesValuesAreValid(resolvedVariables, jobFullName)) {
+        logJobTriggeredWithParams(jobFullName, resolvedVariables);
         item = triggerJobAux(resolvedVariables, postContent);
       }
     }

@@ -1,9 +1,12 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    
+    <j:invokeStatic var="url" className="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericWebHookRequestReceiver" method="getUrl" />
+    
    <f:description>
     <div>
      <p>
-      Is triggered by HTTP requests to <b>http://JENKINS_URL/generic-webhook-trigger/invoke</b>
+      Is triggered by HTTP requests to <b>http://user:passsword@jenkins/${url}/invoke</b>
      </p>
      <p>
       There are example configurations in <a href="https://github.com/jenkinsci/generic-webhook-trigger-plugin/tree/master/src/test/resources/org/jenkinsci/plugins/gwt/bdd">the Git repository</a>.
