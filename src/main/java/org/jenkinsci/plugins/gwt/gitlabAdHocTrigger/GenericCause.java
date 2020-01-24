@@ -14,15 +14,11 @@ public class GenericCause extends Cause {
   private final String cause;
 
   public GenericCause(
-      final String postContent,
-      final Map<String, String> resolvedVariables,
-      final boolean printContributedVariables,
-      final boolean printPostContent,
-      final String cause) {
+      final String postContent, final Map<String, String> resolvedVariables, final String cause) {
     this.postContent = postContent;
     this.resolvedVariables = resolvedVariables;
-    this.printContributedVariables = printContributedVariables;
-    this.printPostContent = printPostContent;
+    this.printContributedVariables = true;
+    this.printPostContent = true;
     if (!isNullOrEmpty(cause)) {
       this.cause = cause;
     } else {

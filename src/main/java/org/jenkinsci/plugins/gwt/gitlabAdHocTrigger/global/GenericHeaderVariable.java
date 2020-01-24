@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.gwt.gitlabAdHocTrigger;
+package org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -7,14 +7,14 @@ import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class GenericRequestVariable extends AbstractDescribableImpl<GenericRequestVariable> {
+public class GenericHeaderVariable extends AbstractDescribableImpl<GenericHeaderVariable> {
 
   @Extension public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
-  public static class DescriptorImpl extends Descriptor<GenericRequestVariable> {
+  public static class DescriptorImpl extends Descriptor<GenericHeaderVariable> {
     @Override
     public String getDisplayName() {
-      return "";
+      return "GenericHeaderVariable";
     }
   }
 
@@ -22,25 +22,25 @@ public class GenericRequestVariable extends AbstractDescribableImpl<GenericReque
   private final String regexpFilter;
 
   @DataBoundConstructor
-  public GenericRequestVariable(String key, String regexpFilter) {
+  public GenericHeaderVariable(String key, String regexpFilter) {
     this.key = checkNotNull(key, "Variable name");
     this.regexpFilter = regexpFilter;
-  }
-
-  public String getRegexpFilter() {
-    return regexpFilter;
   }
 
   public String getKey() {
     return key;
   }
 
-  public String getParameterName() {
+  public String getRegexpFilter() {
+    return regexpFilter;
+  }
+
+  public String getHeaderName() {
     return key;
   }
 
   @Override
   public String toString() {
-    return "GenericRequestVariable [key=" + key + ", regexpFilter=" + regexpFilter + "]";
+    return "GenericHeaderVariable [key=" + key + ", regexpFilter=" + regexpFilter + "]";
   }
 }

@@ -60,7 +60,7 @@
       </f:description>
     </f:entry>
         
-    <f:optionalBlock field="enabled" title="Whitelist enabled" inline="true">
+    <f:optionalBlock field="whitelistEnabled" title="Whitelist enabled" inline="true">
       <f:entry title="Whitelisted servers">
         <f:repeatableProperty field="whitelistItems">
           <f:entry title="">

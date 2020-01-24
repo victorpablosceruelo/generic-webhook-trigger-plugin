@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.gwt.gitlabAdHocTrigger;
+package org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.ExpressionType.JSONPath;
@@ -6,6 +6,7 @@ import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.ExpressionType.JSONPa
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.ExpressionType;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 

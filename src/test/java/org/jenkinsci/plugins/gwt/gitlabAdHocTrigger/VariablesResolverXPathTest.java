@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericHeaderVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericRequestVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.junit.Test;
 

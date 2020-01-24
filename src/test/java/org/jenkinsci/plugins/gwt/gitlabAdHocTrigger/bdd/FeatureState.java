@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericHeaderVariable;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericRequestVariable;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericHeaderVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericRequestVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 
 public class FeatureState {
   private Map<String, List<String>> headers = new HashMap<>();

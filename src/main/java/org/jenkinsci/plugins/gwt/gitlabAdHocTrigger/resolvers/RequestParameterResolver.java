@@ -9,7 +9,7 @@ import com.google.common.base.Optional;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericRequestVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericRequestVariable;
 
 public class RequestParameterResolver {
   public RequestParameterResolver() {}

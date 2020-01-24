@@ -20,7 +20,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;

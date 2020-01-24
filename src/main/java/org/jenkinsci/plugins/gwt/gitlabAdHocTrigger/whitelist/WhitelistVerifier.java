@@ -6,7 +6,7 @@ import com.google.common.base.Optional;
 import java.util.List;
 import java.util.Map;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.CredentialsHelper;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.Whitelist;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.WhitelistItem;
 import org.jenkinsci.plugins.plaincredentials.StringCredentials;
 
@@ -15,22 +15,24 @@ public class WhitelistVerifier {
   public static void verifyWhitelist(
       final String remoteHost, final Map<String, List<String>> headers, final String postContent)
       throws WhitelistException {
-    final Whitelist whitelist = Whitelist.get();
-    doVerifyWhitelist(remoteHost, headers, postContent, whitelist);
+    final JenkinsGitlabAdHocWebhookTrigger jenkinsGitlabAdHocWebhookTrigger =
+        JenkinsGitlabAdHocWebhookTrigger.get();
+    doVerifyWhitelist(remoteHost, headers, postContent, jenkinsGitlabAdHocWebhookTrigger);
   }
 
   static void doVerifyWhitelist(
       final String remoteHost,
       final Map<String, List<String>> headers,
       final String postContent,
-      final Whitelist whitelist)
+      final JenkinsGitlabAdHocWebhookTrigger jenkinsGitlabAdHocWebhookTrigger)
       throws WhitelistException {
-    if (whitelist.getWhitelistItems().isEmpty() || !whitelist.isEnabled()) {
+    if (jenkinsGitlabAdHocWebhookTrigger.getWhitelistItems().isEmpty()
+        || !jenkinsGitlabAdHocWebhookTrigger.isWhitelistEnabled()) {
       return;
     }
     final StringBuilder messages = new StringBuilder();
     int i = 0;
-    for (final WhitelistItem whitelistItem : whitelist.getWhitelistItems()) {
+    for (final WhitelistItem whitelistItem : jenkinsGitlabAdHocWebhookTrigger.getWhitelistItems()) {
       i++;
       try {
         whitelistVerify(remoteHost, whitelistItem, headers, postContent);

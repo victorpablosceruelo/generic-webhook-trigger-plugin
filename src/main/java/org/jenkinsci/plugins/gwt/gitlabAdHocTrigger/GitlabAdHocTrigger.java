@@ -1,6 +1,5 @@
 package org.jenkinsci.plugins.gwt.gitlabAdHocTrigger;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.ParameterActionUtil.createParameterAction;
 import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.Renderer.isMatching;
 import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.Renderer.renderText;
@@ -21,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jenkins.model.ParameterizedJobMixIn;
 import org.jenkinsci.Symbol;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
@@ -30,16 +29,9 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
   /** A value of -1 will make sure the quiet period of the job will be used. */
   private static final int RESPECT_JOBS_QUIET_PERIOD = -1;
 
-  private List<GenericVariable> genericVariables = newArrayList();
   private final String regexpFilterText;
   private final String regexpFilterExpression;
-  private List<GenericRequestVariable> genericRequestVariables = newArrayList();
-  private List<GenericHeaderVariable> genericHeaderVariables = newArrayList();
-  private boolean printPostContent;
-  private boolean printContributedVariables;
-  private String causeString;
   private String token;
-  private boolean silentResponse;
 
   private static final Logger LOGGER = Logger.getLogger(GitlabAdHocTrigger.class.getName());
 
@@ -70,18 +62,10 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
   }
 
   @DataBoundConstructor
-  public GitlabAdHocTrigger(
-      final List<GenericVariable> genericVariables,
-      final String regexpFilterText,
-      final String regexpFilterExpression,
-      final List<GenericRequestVariable> genericRequestVariables,
-      final List<GenericHeaderVariable> genericHeaderVariables) {
-    // this.genericVariables = addDefaultGenericVariables(genericVariablesIn);
-    this.genericVariables = genericVariables;
+  public GitlabAdHocTrigger(final String regexpFilterText, final String regexpFilterExpression) {
+
     this.regexpFilterExpression = regexpFilterExpression;
     this.regexpFilterText = regexpFilterText;
-    this.genericRequestVariables = genericRequestVariables;
-    this.genericHeaderVariables = genericHeaderVariables;
   }
 
   public static List<GenericVariable> getPreDefinedGenericVariables() {
@@ -108,42 +92,6 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
   }
 
   @DataBoundSetter
-  public void setCauseString(final String causeString) {
-    this.causeString = causeString;
-  }
-
-  public String getCauseString() {
-    return causeString;
-  }
-
-  @DataBoundSetter
-  public void setPrintContributedVariables(final boolean printContributedVariables) {
-    this.printContributedVariables = printContributedVariables;
-  }
-
-  @DataBoundSetter
-  public void setPrintPostContent(final boolean printPostContent) {
-    this.printPostContent = printPostContent;
-  }
-
-  @DataBoundSetter
-  public void setSilentResponse(final boolean silentResponse) {
-    this.silentResponse = silentResponse;
-  }
-
-  public boolean isSilentResponse() {
-    return silentResponse;
-  }
-
-  public boolean isPrintContributedVariables() {
-    return printContributedVariables;
-  }
-
-  public boolean isPrintPostContent() {
-    return printPostContent;
-  }
-
-  @DataBoundSetter
   public void setToken(final String token) {
     this.token = token;
   }
@@ -160,16 +108,9 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
       final Map<String, List<String>> headers,
       final Map<String, String[]> parameterMap,
       final String postContent,
-      final String jobFullName) {
-    final Map<String, String> resolvedVariables =
-        new VariablesResolver(
-                headers,
-                parameterMap,
-                postContent,
-                genericVariables,
-                genericRequestVariables,
-                genericHeaderVariables)
-            .getVariables();
+      final String jobFullName,
+      Map<String, String> resolvedVariables,
+      String causeString) {
 
     final String renderedRegexpFilterText = renderText(regexpFilterText, resolvedVariables);
     final boolean isMatching = isMatching(renderedRegexpFilterText, regexpFilterExpression);
@@ -178,7 +119,7 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
     if (isMatching) {
       if (resolvedVariablesValuesAreValid(resolvedVariables, jobFullName)) {
         logJobTriggeredWithParams(jobFullName, resolvedVariables);
-        item = triggerJobAux(resolvedVariables, postContent);
+        item = triggerJobAux(resolvedVariables, postContent, causeString);
       }
     }
     return new GenericTriggerResults(
@@ -225,13 +166,11 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
   }
 
   public hudson.model.Queue.Item triggerJobAux(
-      Map<String, String> resolvedVariables, String postContent) {
+      Map<String, String> resolvedVariables, String postContent, String causeString) {
     hudson.model.Queue.Item item = null;
 
     final String cause = renderText(causeString, resolvedVariables);
-    final GenericCause genericCause =
-        new GenericCause(
-            postContent, resolvedVariables, printContributedVariables, printPostContent, cause);
+    final GenericCause genericCause = new GenericCause(postContent, resolvedVariables, cause);
     final ParametersDefinitionProperty parametersDefinitionProperty =
         job.getProperty(ParametersDefinitionProperty.class);
     final ParametersAction parameters =
@@ -253,20 +192,8 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
     };
   }
 
-  public List<GenericVariable> getGenericVariables() {
-    return genericVariables;
-  }
-
   public String getRegexpFilterExpression() {
     return regexpFilterExpression;
-  }
-
-  public List<GenericRequestVariable> getGenericRequestVariables() {
-    return genericRequestVariables;
-  }
-
-  public List<GenericHeaderVariable> getGenericHeaderVariables() {
-    return genericHeaderVariables;
   }
 
   public String getRegexpFilterText() {
@@ -275,16 +202,11 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
   @Override
   public String toString() {
-    return "GitlabAdHocTrigger [genericVariables="
-        + genericVariables
-        + ", regexpFilterText="
+    return "GitlabAdHocTrigger ["
+        + "regexpFilterText="
         + regexpFilterText
         + ", regexpFilterExpression="
         + regexpFilterExpression
-        + ", genericRequestVariables="
-        + genericRequestVariables
-        + ", genericHeaderVariables="
-        + genericHeaderVariables
         + "]";
   }
 }

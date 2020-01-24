@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericHeaderVariable;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericRequestVariable;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericHeaderVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericRequestVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 
 public class VariablesResolver {
   private List<GenericVariable> configuredGenericVariables = new ArrayList<>();

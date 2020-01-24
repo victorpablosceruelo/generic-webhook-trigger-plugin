@@ -4,7 +4,6 @@ import static com.google.common.base.Charsets.UTF_8;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.SEVERE;
 import static org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericResponse.jsonResponse;
-import static org.kohsuke.stapler.HttpResponses.ok;
 
 import com.google.common.annotations.VisibleForTesting;
 import hudson.Extension;
@@ -23,7 +22,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobfinder.JobFinder;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistException;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistVerifier;
 import org.kohsuke.stapler.HttpResponse;
@@ -75,6 +76,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
     }
 
     final String givenToken = getGivenToken(headers, parameterMap);
+
     return doInvoke(headers, parameterMap, postContent, givenToken);
   }
 
@@ -129,8 +131,20 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
     LOGGER.log(
         Level.INFO, "Received request at " + FULL_URL_NAME + " with post content:\n" + postContent);
 
+    final JenkinsGitlabAdHocWebhookTrigger jenkinsGitlabAdHocWebhookTrigger =
+        JenkinsGitlabAdHocWebhookTrigger.get();
+    String causeString = jenkinsGitlabAdHocWebhookTrigger.getCauseString();
+    final Map<String, String> resolvedVariables =
+        new VariablesResolver(
+                headers,
+                parameterMap,
+                postContent,
+                jenkinsGitlabAdHocWebhookTrigger.getGenericVariables(),
+                jenkinsGitlabAdHocWebhookTrigger.getGenericRequestVariables(),
+                jenkinsGitlabAdHocWebhookTrigger.getGenericHeaderVariables())
+            .getVariables();
+
     final Map<String, Object> triggerResultsMap = new HashMap<>();
-    boolean allSilent = true;
     boolean errors = false;
     for (final FoundJob foundJob : foundJobs) {
       try {
@@ -138,11 +152,15 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
         LOGGER.log(FINE, " with:\n\n" + postContent + "\n\n");
         final GitlabAdHocTrigger trigger = foundJob.getGitlabAdHocTrigger();
         final GenericTriggerResults triggerResults =
-            trigger.trigger(headers, parameterMap, postContent, foundJob.getFullName());
-        if (!trigger.isSilentResponse()) {
-          allSilent = false;
-          triggerResultsMap.put(foundJob.getFullName(), triggerResults);
-        }
+            trigger.trigger(
+                headers,
+                parameterMap,
+                postContent,
+                foundJob.getFullName(),
+                resolvedVariables,
+                causeString);
+        triggerResultsMap.put(foundJob.getFullName(), triggerResults);
+
       } catch (final Throwable t) {
         LOGGER.log(SEVERE, foundJob.getFullName(), t);
         final String msg = createMessageFromException(t);
@@ -150,9 +168,9 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
         errors = true;
       }
     }
-    if (allSilent && foundJobs.size() > 0) {
-      return ok();
-    }
+    // if (foundJobs.size() > 0) {
+    // return ok();
+    // }
     if (errors) {
       return jsonResponse(500, "There were errors when triggering jobs.", triggerResultsMap);
     } else {

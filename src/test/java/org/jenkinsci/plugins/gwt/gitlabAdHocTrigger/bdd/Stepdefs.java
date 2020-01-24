@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.ExpressionType;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericVariable;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.Renderer;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 
 public class Stepdefs {

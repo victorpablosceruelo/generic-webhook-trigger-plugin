@@ -14,7 +14,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GenericVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

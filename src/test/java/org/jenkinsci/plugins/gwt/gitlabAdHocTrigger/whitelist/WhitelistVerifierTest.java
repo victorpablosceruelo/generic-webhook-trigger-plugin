@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.Whitelist;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericHeaderVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericRequestVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.WhitelistItem;
 import org.junit.Test;
 
@@ -23,7 +26,8 @@ public class WhitelistVerifierTest {
 
     final String remoteHost = "192.168.0.1";
     final boolean enabled = false;
-    final Whitelist whitelist = new Whitelist(enabled, new ArrayList<WhitelistItem>());
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, new ArrayList<WhitelistItem>());
 
     assertThat(testDoVerifyWhitelist(remoteHost, headers, postContent, whitelist)).isTrue();
   }
@@ -37,7 +41,8 @@ public class WhitelistVerifierTest {
 
     final String remoteHost = "192.168.0.1";
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist(remoteHost, headers, postContent, whitelist)).isTrue();
   }
@@ -51,7 +56,8 @@ public class WhitelistVerifierTest {
 
     final String remoteHost = "anotherhost";
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist(remoteHost, headers, postContent, whitelist)).isFalse();
   }
@@ -65,7 +71,8 @@ public class WhitelistVerifierTest {
 
     final String remoteHost = "anotherhost";
     final boolean enabled = false;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist(remoteHost, headers, postContent, whitelist)).isTrue();
   }
@@ -85,8 +92,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist =
-        new Whitelist(enabled, Arrays.asList(whitelistItem1, whitelistItem2, whitelistItem3));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem1, whitelistItem2, whitelistItem3));
 
     assertThat(testDoVerifyWhitelist("192.168.0.0", headers, postContent, whitelist)).isFalse();
     assertThat(testDoVerifyWhitelist("192.168.0.1", headers, postContent, whitelist)).isTrue();
@@ -118,8 +125,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist =
-        new Whitelist(
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(
             enabled,
             Arrays.asList(
                 whitelistItem1, whitelistItem2, whitelistItem3, whitelistItem4, whitelistItem5));
@@ -150,7 +157,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist("2.2.2.255", headers, postContent, whitelist)).isFalse();
     assertThat(testDoVerifyWhitelist("2.2.3.0", headers, postContent, whitelist)).isTrue();
@@ -167,7 +175,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist("3.2.3.4", headers, postContent, whitelist)).isFalse();
     assertThat(testDoVerifyWhitelist("3.2.3.5", headers, postContent, whitelist)).isTrue();
@@ -184,7 +193,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist("6.2.3.10", headers, postContent, whitelist)).isTrue();
   }
@@ -198,7 +208,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist("6.2.3.10", headers, postContent, whitelist)).isFalse();
   }
@@ -212,7 +223,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     try {
       doVerifyWhitelist("1.1.1.1", headers, postContent, whitelist);
@@ -231,7 +243,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     try {
       doVerifyWhitelist("1.1.1.1", headers, postContent, whitelist);
@@ -250,7 +263,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     try {
       doVerifyWhitelist("1.1.1.1", headers, postContent, whitelist);
@@ -269,7 +283,8 @@ public class WhitelistVerifierTest {
     final String postContent = "";
 
     final boolean enabled = true;
-    final Whitelist whitelist = new Whitelist(enabled, Arrays.asList(whitelistItem));
+    final JenkinsGitlabAdHocWebhookTrigger whitelist =
+        getWhiteList(enabled, Arrays.asList(whitelistItem));
 
     assertThat(testDoVerifyWhitelist("4.2.3.4", headers, postContent, whitelist)).isFalse();
     assertThat(testDoVerifyWhitelist("4.2.3.5", headers, postContent, whitelist)).isTrue();
@@ -280,7 +295,7 @@ public class WhitelistVerifierTest {
       final String remoteHost,
       final Map<String, List<String>> headers,
       final String postContent,
-      final Whitelist whitelist) {
+      final JenkinsGitlabAdHocWebhookTrigger whitelist) {
     try {
       doVerifyWhitelist(remoteHost, headers, postContent, whitelist);
       return true;
@@ -288,5 +303,17 @@ public class WhitelistVerifierTest {
       Logger.getLogger(WhitelistVerifierTest.class.getSimpleName()).info(e.getMessage());
       return false;
     }
+  }
+
+  private JenkinsGitlabAdHocWebhookTrigger getWhiteList(
+      boolean enabled, List<WhitelistItem> whiteList) {
+    final List<GenericVariable> genericVariables = new ArrayList<GenericVariable>();
+    final List<GenericRequestVariable> genericRequestVariables =
+        new ArrayList<GenericRequestVariable>();
+    final List<GenericHeaderVariable> genericHeaderVariables =
+        new ArrayList<GenericHeaderVariable>();
+
+    return new JenkinsGitlabAdHocWebhookTrigger(
+        genericVariables, genericRequestVariables, genericHeaderVariables, enabled, whiteList);
   }
 }
