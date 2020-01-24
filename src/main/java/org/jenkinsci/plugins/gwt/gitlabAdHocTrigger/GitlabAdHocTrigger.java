@@ -187,6 +187,8 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
   private boolean resolvedVariablesValuesAreValid(
       Map<String, String> resolvedVariables, String jobFullName) {
+
+    // 1: Solo permitimos merge_requests:
     if (!valueForKeyIs("object_kind", "merge_request", resolvedVariables)) {
       return false;
     }

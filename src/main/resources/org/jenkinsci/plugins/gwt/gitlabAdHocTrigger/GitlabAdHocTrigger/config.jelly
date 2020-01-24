@@ -32,57 +32,6 @@
     </div>
    </f:description>
    
- <j:invokeStatic var="genericVariablesIn" className="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GitlabAdHocTrigger" method="getPreDefinedGenericVariables" />
- <f:entry title="Post content parameters" field="genericVariables">
-  <f:repeatableProperty field="genericVariables"  minimum="0" default="${genericVariablesIn}"/>  
-   <f:description>
-    If you want value of <b>param1</b> from post content <code>{ "param1": "value1" }</code> to be contributed, you need to add <b>$.param1</b> here.
-   </f:description>
- </f:entry>
-
- <f:entry title="Header parameters" field="genericHeaderVariables">
-  <f:repeatableProperty field="genericHeaderVariables"  minimum="0" />  
-   <f:description>
-    If you want value of header <b>param1</b> to be contributed, you need to add "param1" here.
-   </f:description>
- </f:entry>
-
- <f:entry title="Request parameters" field="genericRequestVariables">
-  <f:repeatableProperty field="genericRequestVariables"  minimum="0" />  
-   <f:description>
-    If you want value of query parameter <b>param1</b> to be contributed, you need to add "param1" here.
-   </f:description>
- </f:entry>
- 
- <f:entry title="Cause">
-   <f:textbox field="causeString" default="Generic Cause"/>
-   <f:description>
-    This will be displayed in any triggered job. You can use the variables here to create a custom cause like <i>"$name committed to $branch"</i>, if you have configured variables named <b>name</b> and <b>branch</b>.
-   </f:description>
- </f:entry>
-
- <f:entry title="Silent response" field="silentResponse">
-   <f:checkbox/>
-   <f:description>
-    Avoid responding with information about triggered jobs.
-   </f:description>
- </f:entry>
-
- <f:entry title="Print post content" field="printPostContent">
-   <f:checkbox default='true' />
-   <f:description>
-    Print post content in job log.
-   </f:description>
- </f:entry>
-
- <f:entry title="Print contributed variables" field="printContributedVariables">
-   <f:checkbox default='true' />
-   <f:description>
-    Print contributed variables in job log.
-   </f:description>
- </f:entry>
-
-
  <f:section title="Optional filter">
   <f:entry title="Expression">
    <f:textbox field="regexpFilterExpression"/>
