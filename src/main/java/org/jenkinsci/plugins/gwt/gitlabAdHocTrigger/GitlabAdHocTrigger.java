@@ -102,6 +102,8 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
     toAdd.add(new GenericVariable("state_merge", "$.object_attributes.state"));
     toAdd.add(new GenericVariable("project_id", "$.project.id"));
     toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
+    toAdd.add(new GenericVariable("author_id", "$.object_attributes.author_id"));
+    toAdd.add(new GenericVariable("user_name", "$.user.name"));
     return toAdd;
   }
 
