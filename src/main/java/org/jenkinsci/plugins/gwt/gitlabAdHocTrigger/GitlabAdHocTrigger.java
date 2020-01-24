@@ -13,14 +13,12 @@ import hudson.model.ParametersAction;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jenkins.model.ParameterizedJobMixIn;
 import org.jenkinsci.Symbol;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
@@ -66,29 +64,6 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
     this.regexpFilterExpression = regexpFilterExpression;
     this.regexpFilterText = regexpFilterText;
-  }
-
-  public static List<GenericVariable> getPreDefinedGenericVariables() {
-    List<GenericVariable> toAdd = new ArrayList<GenericVariable>();
-    toAdd.add(new GenericVariable("project", "$.project"));
-    toAdd.add(new GenericVariable("object_kind", "$.object_kind"));
-    toAdd.add(new GenericVariable("source_branch", "$.object_attributes.source_branch"));
-    toAdd.add(new GenericVariable("target_branch", "$.object_attributes.target_branch"));
-    toAdd.add(new GenericVariable("merge_status", "$.object_attributes.merge_status"));
-    toAdd.add(new GenericVariable("project_name", "$.object_attributes.source.name"));
-    toAdd.add(new GenericVariable("project_namespace", "$.object_attributes.source.namespace"));
-    toAdd.add(
-        new GenericVariable(
-            "project_path_namespace", "$.object_attributes.source.path_with_namespace"));
-    toAdd.add(new GenericVariable("target_url", "$.object_attributes.target.git_http_url"));
-    toAdd.add(new GenericVariable("source_url", "$.object_attributes.source.git_http_url"));
-    toAdd.add(new GenericVariable("result_gitlab_url", "$.object_attributes.url"));
-    toAdd.add(new GenericVariable("state_merge", "$.object_attributes.state"));
-    toAdd.add(new GenericVariable("project_id", "$.project.id"));
-    toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
-    toAdd.add(new GenericVariable("author_id", "$.object_attributes.author_id"));
-    toAdd.add(new GenericVariable("user_name", "$.user.name"));
-    return toAdd;
   }
 
   @DataBoundSetter

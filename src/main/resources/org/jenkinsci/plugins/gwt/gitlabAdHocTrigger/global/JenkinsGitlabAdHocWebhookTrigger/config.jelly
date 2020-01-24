@@ -10,11 +10,20 @@
 
   <f:section title="GitLab Ad-Hoc Webhook Trigger">
 
-    <j:invokeStatic var="genericVariablesIn" className="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.GitlabAdHocTrigger" method="getPreDefinedGenericVariables" />
+    <j:invokeStatic var="predefinedGenericVariablesStr" className="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariableUtil" method="getPreDefinedGenericVariablesStr" />
+    <j:invokeStatic var="predefinedGenericVariables" className="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariableUtil" method="getPreDefinedGenericVariables" />
+    
     <f:entry title="Post content parameters" field="genericVariables">
-     <f:repeatableProperty field="genericVariables"  minimum="0" default="${genericVariablesIn}"/>  
+     <f:repeatableProperty field="genericVariables"  minimum="0" />  
       <f:description>
        If you want value of <b>param1</b> from post content <code>{ "param1": "value1" }</code> to be contributed, you need to add <b>$.param1</b> here.
+       <BR />
+       Example of variables definition for GitLab:
+
+        <f:repeatable noAddButton='true' items="${predefinedGenericVariables}" var="preDefGenVar" minimum="1">
+            <st:include page="readOnly.jelly" class="org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.GenericVariable" />
+        </f:repeatable>
+        
       </f:description>
     </f:entry>
 
