@@ -54,9 +54,18 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
 
   @Override
   public boolean configure(final StaplerRequest req, final JSONObject json) throws FormException {
+    cleanUpInstanceValues();
     req.bindJSON(this, json);
     save();
     return true;
+  }
+
+  private void cleanUpInstanceValues() {
+    setCauseString(new String());
+    setWhitelistItems(new ArrayList<WhitelistItem>());
+    setGenericVariables(new ArrayList<GenericVariable>());
+    setGenericRequestVariables(new ArrayList<GenericRequestVariable>());
+    setGenericHeaderVariables(new ArrayList<GenericHeaderVariable>());
   }
 
   @DataBoundSetter

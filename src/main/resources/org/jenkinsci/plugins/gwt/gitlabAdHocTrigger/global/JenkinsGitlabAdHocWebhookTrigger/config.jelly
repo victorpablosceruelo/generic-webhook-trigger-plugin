@@ -15,7 +15,7 @@
     
     <f:entry title="Post content parameters" field="genericVariables">
      <f:repeatableProperty field="genericVariables"  minimum="0" />  
-      <f:description>l
+      <f:description>
           <BR />
           If you want value of <b>param1</b> from post content <code>{ "param1": "value1" }</code> to be contributed, you need to add <b>$.param1</b> here.
           <BR />
