@@ -40,11 +40,14 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
   private static final String FULL_URL_NAME = "http://user:passsword@jenkins/" + URL_NAME;
 
   private static final String ERROR_GETTING_JOBS_NAME_MSG_1 =
-      "Request invalid for launching jobs: " + "Could NOT get a jobname tail from it. ";
+      "Request invalid for launching jobs: Could NOT get a jobname tail from it. ";
 
   private static final String ERROR_GETTING_JOBS_NAME_MSG_2 =
       "Request invalid for launching jobs: "
           + "Could not get from JSON a not-null value for \'project_path_with_namespace\'";
+
+  private static final String ERROR_GETTING_JOBS_NAME_MSG_3 =
+      "Request invalid for launching jobs: " + "Could not get a valid job name from the strings ";
 
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
@@ -157,16 +160,22 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       return jsonResponse(404, NO_JOBS_MSG);
     }
 
-    String jobFullNameWithoutTail = resolvedVariables.get("project_path_with_namespace");
+    String jobFullNameWithoutTail = JobNameTailTool.getJobFullNameWithoutTail(resolvedVariables);
     if (jobFullNameWithoutTail == null) {
       return jsonResponse(404, ERROR_GETTING_JOBS_NAME_MSG_2);
     }
-    String jobFullName = jobFullNameWithoutTail + jobNameTail;
+    String jobFullName = JobNameTailTool.computeJobFullName(jobFullNameWithoutTail, jobNameTail);
+    if (jobFullName == null) {
+      String fullErrorMsg =
+          ERROR_GETTING_JOBS_NAME_MSG_3 + jobFullNameWithoutTail + " " + jobNameTail;
+      return jsonResponse(404, fullErrorMsg);
+    }
 
     final List<FoundJob> foundJobs2 = filterJobsByName(foundJobs1, jobFullName);
     if (foundJobs2.isEmpty()) {
-      LOGGER.log(Level.WARNING, NO_JOBS_AFTER_FILTER_MSG);
-      return jsonResponse(404, NO_JOBS_AFTER_FILTER_MSG);
+      String fullErrorMsg = NO_JOBS_AFTER_FILTER_MSG + jobFullName;
+      LOGGER.log(Level.WARNING, fullErrorMsg);
+      return jsonResponse(404, fullErrorMsg);
     }
 
     return invokeJobs(

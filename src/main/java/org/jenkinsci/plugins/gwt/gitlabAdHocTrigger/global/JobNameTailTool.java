@@ -72,4 +72,24 @@ public class JobNameTailTool {
 
     return (currentValue.equals(value));
   }
+
+  public static String getJobFullNameWithoutTail(Map<String, String> resolvedVariables) {
+    return resolvedVariables.get("project_path_with_namespace");
+  }
+
+  public static String computeJobFullName(String jobFullNameWithoutTail, String jobNameTail) {
+
+    int index = jobFullNameWithoutTail.lastIndexOf("/");
+    if (index < 0) {
+      return null;
+    }
+
+    String jobBaseName = jobFullNameWithoutTail.substring(index + 1);
+    if (jobBaseName == null) {
+      return null;
+    }
+
+    String jobFullName = jobFullNameWithoutTail + "/" + jobBaseName + jobNameTail;
+    return jobFullName;
+  }
 }
