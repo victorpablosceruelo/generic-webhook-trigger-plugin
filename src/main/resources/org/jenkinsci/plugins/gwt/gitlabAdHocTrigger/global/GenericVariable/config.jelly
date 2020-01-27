@@ -3,9 +3,9 @@
   <f:entry title="Variable" >
     <f:textbox field="key"/>
   </f:entry>
-
   <f:entry title="Expression">
     <f:textbox field="value" />
+    
     <f:entry>
      <f:radio name="expressionType" field="expressionType" value="JSONPath" title="JSONPath" checked="${instance.expressionType == 'JSONPath'}"/>
     
