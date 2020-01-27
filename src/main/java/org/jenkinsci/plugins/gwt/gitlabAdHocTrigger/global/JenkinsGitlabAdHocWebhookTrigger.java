@@ -73,6 +73,10 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
     this.whitelistItems = whitelistItems;
   }
 
+  public List<WhitelistItem> getWhitelistItems() {
+    return whitelistItems;
+  }
+
   @DataBoundSetter
   public void setCauseString(final String causeString) {
     this.causeString = causeString;
@@ -87,9 +91,17 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
     this.printContributedVariables = printContributedVariables;
   }
 
+  public boolean isPrintContributedVariables() {
+    return printContributedVariables;
+  }
+
   @DataBoundSetter
   public void setPrintPostContent(final boolean printPostContent) {
     this.printPostContent = printPostContent;
+  }
+
+  public boolean isPrintPostContent() {
+    return printPostContent;
   }
 
   @DataBoundSetter
@@ -101,24 +113,27 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
     return silentResponse;
   }
 
-  public boolean isPrintContributedVariables() {
-    return printContributedVariables;
-  }
-
-  public boolean isPrintPostContent() {
-    return printPostContent;
-  }
-
-  public List<WhitelistItem> getWhitelistItems() {
-    return whitelistItems;
+  @DataBoundSetter
+  public void setGenericVariables(List<GenericVariable> genericVariables) {
+    this.genericVariables = genericVariables;
   }
 
   public List<GenericVariable> getGenericVariables() {
     return genericVariables;
   }
 
+  @DataBoundSetter
+  public void setGenericRequestVariables(List<GenericRequestVariable> genericRequestVariables) {
+    this.genericRequestVariables = genericRequestVariables;
+  }
+
   public List<GenericRequestVariable> getGenericRequestVariables() {
     return genericRequestVariables;
+  }
+
+  @DataBoundSetter
+  public void setGenericHeaderVariables(List<GenericHeaderVariable> genericHeaderVariables) {
+    this.genericHeaderVariables = genericHeaderVariables;
   }
 
   public List<GenericHeaderVariable> getGenericHeaderVariables() {
