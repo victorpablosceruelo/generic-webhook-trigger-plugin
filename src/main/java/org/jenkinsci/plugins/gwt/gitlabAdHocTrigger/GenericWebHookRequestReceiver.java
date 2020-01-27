@@ -10,6 +10,7 @@ import hudson.Extension;
 import hudson.model.UnprotectedRootAction;
 import hudson.security.csrf.CrumbExclusion;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JobNameTailTool;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobfinder.JobFinder;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistException;
@@ -36,6 +38,8 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
   private static final String URL_NAME = "my-gitlab-webhook-trigger";
 
   private static final String FULL_URL_NAME = "http://user:passsword@jenkins/" + URL_NAME;
+
+  private static final String ERROR_GETTING_JOBS_MSG = "Request invalid for launching jobs.";
 
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
@@ -117,22 +121,12 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       final String postContent,
       final String givenToken) {
 
-    final List<FoundJob> foundJobs = JobFinder.findAllJobsWithTrigger(givenToken);
-
-    return invokeJobs(foundJobs, headers, parameterMap, postContent);
-  }
-
-  private HttpResponse invokeJobs(
-      List<FoundJob> foundJobs,
-      Map<String, List<String>> headers,
-      Map<String, String[]> parameterMap,
-      String postContent) {
-
-    LOGGER.log(
-        Level.INFO, "Received request at " + FULL_URL_NAME + " with post content:\n" + postContent);
+    String msg = "Received request at " + FULL_URL_NAME + " with post content:\n" + postContent;
+    LOGGER.log(Level.INFO, msg);
 
     final JenkinsGitlabAdHocWebhookTrigger jenkinsGitlabAdHocWebhookTrigger =
         JenkinsGitlabAdHocWebhookTrigger.get();
+
     String causeString = jenkinsGitlabAdHocWebhookTrigger.getCauseString();
     final Map<String, String> resolvedVariables =
         new VariablesResolver(
@@ -143,6 +137,54 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
                 jenkinsGitlabAdHocWebhookTrigger.getGenericRequestVariables(),
                 jenkinsGitlabAdHocWebhookTrigger.getGenericHeaderVariables())
             .getVariables();
+
+    String jobNameTail = JobNameTailTool.getJobNameTail(resolvedVariables);
+    if (jobNameTail == null) {
+      return jsonResponse(404, ERROR_GETTING_JOBS_MSG);
+    }
+
+    final List<FoundJob> foundJobs1 = JobFinder.findAllJobsWithTrigger(givenToken);
+
+    String jobFullNameWithoutTail = resolvedVariables.get("project_path_with_namespace");
+    String jobFullName = jobFullNameWithoutTail + jobNameTail;
+
+    final List<FoundJob> foundJobs2 = filterJobsByName(foundJobs1, jobFullName);
+    if (foundJobs2.isEmpty()) {
+      LOGGER.log(Level.FINE, NO_JOBS_MSG);
+      return jsonResponse(404, NO_JOBS_MSG);
+    }
+
+    return invokeJobs(
+        foundJobs2, headers, parameterMap, postContent, causeString, resolvedVariables);
+  }
+
+  private void logValueIsNotTheExpectedOne(String key, String value, String currentValue) {
+    StringBuilder sbMsg = new StringBuilder();
+    sbMsg.append("Expected value for key ");
+    sbMsg.append(key).append(" is ");
+    sbMsg.append(value).append(", not ").append(currentValue);
+    LOGGER.log(Level.WARNING, sbMsg.toString());
+  }
+
+  private List<FoundJob> filterJobsByName(List<FoundJob> foundJobsIn, String jobFullName) {
+
+    List<FoundJob> foundJobsOut = new ArrayList<FoundJob>();
+
+    for (FoundJob foundJob : foundJobsIn) {
+      if (jobFullName.equals(foundJob.getFullName())) {
+        foundJobsOut.add(foundJob);
+      }
+    }
+    return foundJobsOut;
+  }
+
+  private HttpResponse invokeJobs(
+      List<FoundJob> foundJobs,
+      Map<String, List<String>> headers,
+      Map<String, String[]> parameterMap,
+      String postContent,
+      String causeString,
+      Map<String, String> resolvedVariables) {
 
     final Map<String, Object> triggerResultsMap = new HashMap<>();
     boolean errors = false;
@@ -174,12 +216,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
     if (errors) {
       return jsonResponse(500, "There were errors when triggering jobs.", triggerResultsMap);
     } else {
-      if (foundJobs.isEmpty()) {
-        LOGGER.log(Level.FINE, NO_JOBS_MSG);
-        return jsonResponse(404, NO_JOBS_MSG);
-      } else {
-        return jsonResponse(200, "Triggered jobs.", triggerResultsMap);
-      }
+      return jsonResponse(200, "Triggered jobs.", triggerResultsMap);
     }
   }
 

@@ -92,52 +92,11 @@ public class GitlabAdHocTrigger extends Trigger<Job<?, ?>> {
 
     hudson.model.Queue.Item item = null;
     if (isMatching) {
-      if (resolvedVariablesValuesAreValid(resolvedVariables, jobFullName)) {
-        logJobTriggeredWithParams(jobFullName, resolvedVariables);
-        item = triggerJobAux(resolvedVariables, postContent, causeString);
-      }
+      logJobTriggeredWithParams(jobFullName, resolvedVariables);
+      item = triggerJobAux(resolvedVariables, postContent, causeString);
     }
     return new GenericTriggerResults(
         item, resolvedVariables, renderedRegexpFilterText, regexpFilterExpression);
-  }
-
-  private boolean resolvedVariablesValuesAreValid(
-      Map<String, String> resolvedVariables, String jobFullName) {
-
-    // 1: Solo permitimos merge_requests:
-    if (!valueForKeyIs("object_kind", "merge_request", resolvedVariables)) {
-      return false;
-    }
-    if (!valueForKeyIs("project_path_with_namespace", jobFullName, resolvedVariables)) {
-      return false;
-    }
-    return true;
-  }
-
-  private boolean valueForKeyIs(String key, String value, Map<String, String> resolvedVariables) {
-    String currentValue = resolvedVariables.get(key);
-    if (currentValue == null) {
-      if (value != null) {
-        logValueIsNotTheExpectedOne(key, value, currentValue);
-        return false;
-      }
-      return true;
-    }
-
-    if (currentValue.equals(value)) {
-      return true;
-    }
-
-    logValueIsNotTheExpectedOne(key, value, currentValue);
-    return false;
-  }
-
-  private void logValueIsNotTheExpectedOne(String key, String value, String currentValue) {
-    StringBuilder sbMsg = new StringBuilder();
-    sbMsg.append("Expected value for key ");
-    sbMsg.append(key).append(" is ");
-    sbMsg.append(value).append(", not ").append(currentValue);
-    LOGGER.log(Level.WARNING, sbMsg.toString());
   }
 
   public hudson.model.Queue.Item triggerJobAux(
