@@ -1,5 +1,8 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <BR />
-    ${preDefGenVar.key} : ${preDefGenVar.value} (${preDefGenVar.expressionType})
+    <TR>
+        <TD>${preDefGenVar.key}</TD>
+        <TD>${preDefGenVar.value}</TD> 
+        <TD>(${preDefGenVar.expressionType})</TD>
+    </TR>
 </j:jelly>

@@ -29,7 +29,7 @@ import java.util.List;
 /** @author me */
 public class GenericVariableUtil {
 
-  public static List<GenericVariable> getPreDefinedGenericVariables() {
+  public static GenericVariable[] getPreDefinedGenericVariables() {
     List<GenericVariable> toAdd = new ArrayList<GenericVariable>();
 
     toAdd.add(new GenericVariable("project", "$.project"));
@@ -51,7 +51,7 @@ public class GenericVariableUtil {
     toAdd.add(new GenericVariable("author_id", "$.object_attributes.author_id"));
     toAdd.add(new GenericVariable("user_name", "$.user.name"));
 
-    return toAdd;
+    return toAdd.toArray(new GenericVariable[0]);
   }
 
   public static String getPreDefinedGenericVariablesStr() {
