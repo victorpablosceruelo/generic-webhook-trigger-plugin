@@ -39,8 +39,12 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
   private static final String FULL_URL_NAME = "http://user:passsword@jenkins/" + URL_NAME;
 
-  private static final String ERROR_GETTING_JOBS_MSG = "Request invalid for launching jobs.";
+  private static final String ERROR_GETTING_JOBS_NAME_MSG_1 = "Request invalid for launching jobs: "
+          + "Could NOT get a jobname tail from it. ";
 
+  private static final String ERROR_GETTING_JOBS_NAME_MSG_2 = "Request invalid for launching jobs: "
+          + "Could not get from JSON a not-null value for \'project_path_with_namespace\'";
+  
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
           + GitlabAdHocTrigger.class.getSimpleName()
@@ -50,6 +54,9 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
           + FULL_URL_NAME
           + "... ";
 
+  private static final String NO_JOBS_AFTER_FILTER_MSG = 
+      "Did not find any jobs after applying the filter \'only jobs named NAME\', being NAME = ";
+  
   private static final Logger LOGGER =
       Logger.getLogger(GenericWebHookRequestReceiver.class.getName());
 
@@ -140,18 +147,25 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
     String jobNameTail = JobNameTailTool.getJobNameTail(resolvedVariables);
     if (jobNameTail == null) {
-      return jsonResponse(404, ERROR_GETTING_JOBS_MSG);
+      return jsonResponse(404, ERROR_GETTING_JOBS_NAME_MSG_1);
     }
 
     final List<FoundJob> foundJobs1 = JobFinder.findAllJobsWithTrigger(givenToken);
+    if (foundJobs1.isEmpty()) {
+      LOGGER.log(Level.WARNING, NO_JOBS_MSG);
+      return jsonResponse(404, NO_JOBS_MSG);
+    }
 
     String jobFullNameWithoutTail = resolvedVariables.get("project_path_with_namespace");
+    if (jobFullNameWithoutTail == null) {
+      return jsonResponse(404, ERROR_GETTING_JOBS_NAME_MSG_2);
+    }
     String jobFullName = jobFullNameWithoutTail + jobNameTail;
 
     final List<FoundJob> foundJobs2 = filterJobsByName(foundJobs1, jobFullName);
     if (foundJobs2.isEmpty()) {
-      LOGGER.log(Level.FINE, NO_JOBS_MSG);
-      return jsonResponse(404, NO_JOBS_MSG);
+      LOGGER.log(Level.WARNING, NO_JOBS_AFTER_FILTER_MSG);
+      return jsonResponse(404, NO_JOBS_AFTER_FILTER_MSG);
     }
 
     return invokeJobs(
@@ -190,7 +204,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
     boolean errors = false;
     for (final FoundJob foundJob : foundJobs) {
       try {
-        LOGGER.log(FINE, "Triggering " + foundJob.getFullName());
+        LOGGER.log(FINE, "Triggering job " + foundJob.getFullName());
         LOGGER.log(FINE, " with:\n\n" + postContent + "\n\n");
         final GitlabAdHocTrigger trigger = foundJob.getGitlabAdHocTrigger();
         final GenericTriggerResults triggerResults =
