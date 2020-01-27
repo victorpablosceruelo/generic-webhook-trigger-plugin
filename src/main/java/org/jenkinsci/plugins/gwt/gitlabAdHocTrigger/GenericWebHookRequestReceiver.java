@@ -39,12 +39,13 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
 
   private static final String FULL_URL_NAME = "http://user:passsword@jenkins/" + URL_NAME;
 
-  private static final String ERROR_GETTING_JOBS_NAME_MSG_1 = "Request invalid for launching jobs: "
-          + "Could NOT get a jobname tail from it. ";
+  private static final String ERROR_GETTING_JOBS_NAME_MSG_1 =
+      "Request invalid for launching jobs: " + "Could NOT get a jobname tail from it. ";
 
-  private static final String ERROR_GETTING_JOBS_NAME_MSG_2 = "Request invalid for launching jobs: "
+  private static final String ERROR_GETTING_JOBS_NAME_MSG_2 =
+      "Request invalid for launching jobs: "
           + "Could not get from JSON a not-null value for \'project_path_with_namespace\'";
-  
+
   private static final String NO_JOBS_MSG =
       "Did not find any jobs with "
           + GitlabAdHocTrigger.class.getSimpleName()
@@ -54,9 +55,9 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
           + FULL_URL_NAME
           + "... ";
 
-  private static final String NO_JOBS_AFTER_FILTER_MSG = 
+  private static final String NO_JOBS_AFTER_FILTER_MSG =
       "Did not find any jobs after applying the filter \'only jobs named NAME\', being NAME = ";
-  
+
   private static final Logger LOGGER =
       Logger.getLogger(GenericWebHookRequestReceiver.class.getName());
 
