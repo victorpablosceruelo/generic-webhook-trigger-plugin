@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JobNameTailTool;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JobNameTool;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobfinder.JobFinder;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistException;
@@ -149,7 +149,9 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
                 jenkinsGitlabAdHocWebhookTrigger.getGenericHeaderVariables())
             .getVariables();
 
-    String jobNameTail = JobNameTailTool.getJobNameTail(resolvedVariables);
+    JobNameTool jobNameTool = new JobNameTool();
+
+    String jobNameTail = jobNameTool.getJobNameTail(resolvedVariables);
     if (jobNameTail == null) {
       return jsonResponse(404, ERROR_GETTING_JOBS_NAME_MSG_1);
     }
@@ -160,11 +162,11 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       return jsonResponse(404, NO_JOBS_MSG);
     }
 
-    String jobFullNameWithoutTail = JobNameTailTool.getJobFullNameWithoutTail(resolvedVariables);
+    String jobFullNameWithoutTail = jobNameTool.getJobFullNameWithoutTail(resolvedVariables);
     if (jobFullNameWithoutTail == null) {
       return jsonResponse(404, ERROR_GETTING_JOBS_NAME_MSG_2);
     }
-    String jobFullName = JobNameTailTool.computeJobFullName(jobFullNameWithoutTail, jobNameTail);
+    String jobFullName = jobNameTool.computeJobFullName(jobFullNameWithoutTail, jobNameTail);
     if (jobFullName == null) {
       String fullErrorMsg =
           ERROR_GETTING_JOBS_NAME_MSG_3 + jobFullNameWithoutTail + " " + jobNameTail;
