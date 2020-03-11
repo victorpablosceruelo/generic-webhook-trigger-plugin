@@ -26,6 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JobNameTool;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobfinder.JobFinder;
+import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobsMetadata.JobsMetadata;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistException;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistVerifier;
@@ -139,6 +140,8 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
         JenkinsGitlabAdHocWebhookTrigger.get();
 
     String causeString = jenkinsGitlabAdHocWebhookTrigger.getCauseString();
+    String metadataRepositoryUrl = jenkinsGitlabAdHocWebhookTrigger.getCauseString();
+    
     final Map<String, String> resolvedVariables =
         new VariablesResolver(
                 headers,
@@ -180,6 +183,9 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       return jsonResponse(404, fullErrorMsg);
     }
 
+    JobsMetadata jobsMetadata = JobsMetadata.getInstance(metadataRepositoryUrl);
+    jobsMetadata.injectJobMetadataAsResolvedVariables(jobFullNameWithoutTail, jobNameTail, resolvedVariables);
+    
     return invokeJobs(
         foundJobs2, headers, parameterMap, postContent, causeString, resolvedVariables);
   }
