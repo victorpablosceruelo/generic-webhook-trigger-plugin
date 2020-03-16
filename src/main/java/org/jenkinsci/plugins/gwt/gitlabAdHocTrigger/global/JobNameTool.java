@@ -46,14 +46,14 @@ public class JobNameTool {
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "opened", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer", resolvedVariables))) {
-      return "_m2int";
+      return "merge2integracion";
     }
 
     // 2) Merge request opened de developer-hotfix a hotfix.
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "opened", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer-hotfix", resolvedVariables))) {
-      return "_m2hotf";
+      return "merge2hotfix";
     }
 
     // 3) Merge request opened pero no a developer o developer-hotfix.
@@ -71,7 +71,7 @@ public class JobNameTool {
         && (valueForKeyIs("state_merge", "closed", resolvedVariables))
         && ((valueForKeyIs("target_branch", "developer", resolvedVariables))
             || (valueForKeyIs("target_branch", "developer-hotfix", resolvedVariables)))) {
-      return "_mr_closed";
+      return "merge_request_closed";
     }
 
     // 3) Merge request closed pero NO a developer o developer-hotfix.
@@ -88,14 +88,14 @@ public class JobNameTool {
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "merged", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer", resolvedVariables))) {
-      return "_dep2Art";
+      return "deploy2artifactory";
     }
 
-    // 3) Merge request merged de developer a integracion.
+    // 3) Merge request merged de developer a developer-hotfix.
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "merged", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer-hotfix", resolvedVariables))) {
-      return "_deph2Art";
+      return "deploy2artifactory";
     }
 
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
@@ -134,17 +134,6 @@ public class JobNameTool {
 
   public String computeJobFullName(String jobFullNameWithoutTail, String jobNameTail) {
 
-    int index = jobFullNameWithoutTail.lastIndexOf("/");
-    if (index < 0) {
-      return null;
-    }
-
-    String jobBaseName = jobFullNameWithoutTail.substring(index + 1);
-    if (jobBaseName == null) {
-      return null;
-    }
-
-    String jobFullName = jobFullNameWithoutTail + "/" + jobBaseName + jobNameTail;
-    return jobFullName;
+      return jobFullNameWithoutTail + "/" + jobNameTail;
   }
 }
