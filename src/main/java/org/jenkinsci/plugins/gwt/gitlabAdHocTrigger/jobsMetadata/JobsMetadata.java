@@ -28,58 +28,54 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-/**
- *
- * @author me
- */
+/** @author me */
 public class JobsMetadata {
-    
-    private static int MINS_BETWEEN_UPDATES = 10;
-    
-    private static JobsMetadata instance = null;
-    private static Object mutex = new Object();
-    
-    private Date nextUpdate;
-    private File repositoryFolder;
-    
-    private JobsMetadata(String metadataRepositoryUrl) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MINUTE, MINS_BETWEEN_UPDATES);
-        nextUpdate = calendar.getTime();
-        
-        repositoryFolder = updateRepositoryLocalCopy(metadataRepositoryUrl);
-    }
-    
-    public static JobsMetadata getInstance(String metadataRepositoryUrl) {
-        synchronized(mutex) {
-            if ((instance == null) || (instance.isRatherOld())) {
-                JobsMetadata localInstance = new JobsMetadata(metadataRepositoryUrl);
-                instance = localInstance;
-            }
-            return instance;
-        }
-    }
 
-    private boolean isRatherOld() {
-        return (nextUpdate.before(new Date()));
-    }
+  private static int MINS_BETWEEN_UPDATES = 10;
 
-    private File updateRepositoryLocalCopy(String metadataRepositoryUrl) {
-        // Create script used to download repository.
-        // Run the script.
-        return new File("");
-    }
-    
-    private File getJobMetadataFile(String jobFullNameWithoutTail, String jobNameTail) {
-        return new File("");
-    }
+  private static JobsMetadata instance = null;
+  private static Object mutex = new Object();
 
-    public void injectJobMetadataAsResolvedVariables(String jobFullNameWithoutTail, String jobNameTail, Map<String, String> resolvedVariables) {
-        // getJobMetadataFile
-        // read job metadata file
-        // add the variables to the map.
+  private Date nextUpdate;
+  private File repositoryFolder;
+
+  private JobsMetadata(String metadataRepositoryUrl) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    calendar.add(Calendar.MINUTE, MINS_BETWEEN_UPDATES);
+    nextUpdate = calendar.getTime();
+
+    repositoryFolder = updateRepositoryLocalCopy(metadataRepositoryUrl);
+  }
+
+  public static JobsMetadata getInstance(String metadataRepositoryUrl) {
+    synchronized (mutex) {
+      if ((instance == null) || (instance.isRatherOld())) {
+        JobsMetadata localInstance = new JobsMetadata(metadataRepositoryUrl);
+        instance = localInstance;
+      }
+      return instance;
     }
-    
-    
+  }
+
+  private boolean isRatherOld() {
+    return (nextUpdate.before(new Date()));
+  }
+
+  private File updateRepositoryLocalCopy(String metadataRepositoryUrl) {
+    // Create script used to download repository.
+    // Run the script.
+    return new File("");
+  }
+
+  private File getJobMetadataFile(String jobFullNameWithoutTail, String jobNameTail) {
+    return new File("");
+  }
+
+  public void injectJobMetadataAsResolvedVariables(
+      String jobFullNameWithoutTail, String jobNameTail, Map<String, String> resolvedVariables) {
+    // getJobMetadataFile
+    // read job metadata file
+    // add the variables to the map.
+  }
 }

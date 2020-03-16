@@ -27,6 +27,7 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
   private boolean printPostContent;
   private boolean printContributedVariables;
   private String causeString;
+  private String metadataRepositoryUrl;
   private boolean silentResponse;
 
   private boolean whitelistEnabled;
@@ -93,6 +94,15 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
 
   public String getCauseString() {
     return causeString;
+  }
+
+  @DataBoundSetter
+  public void setMetadataRepositoryUrl(final String metadataRepositoryUrl) {
+    this.metadataRepositoryUrl = metadataRepositoryUrl;
+  }
+
+  public String getMetadataRepositoryUrl() {
+    return metadataRepositoryUrl;
   }
 
   @DataBoundSetter
