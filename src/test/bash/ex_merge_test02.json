@@ -1,0 +1,180 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "name": "Jenkins-IC-PRE",
+    "username": "JENKINS",
+    "avatar_url": "https://des-gitlab.scae.redsara.es/uploads/-/system/user/avatar/2/baturro.png",
+    "email": "oficinatecnica.sgad@correo.gob.es"
+  },
+  "project": {
+    "id": 29,
+    "name": "piloto-maven-test",
+    "description": "Piloto Java Maven Hello World con test",
+    "web_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+    "avatar_url": "https://des-gitlab.scae.redsara.es/uploads/-/system/project/avatar/29/mvn-java-tip-icon.png",
+    "git_ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+    "git_http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git",
+    "namespace": "Area-PILOTO",
+    "visibility_level": 0,
+    "path_with_namespace": "JAVA/PILOTO/piloto-maven-test",
+    "default_branch": "master",
+    "ci_config_path": null,
+    "homepage": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+    "url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+    "ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+    "http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 2,
+    "created_at": "2020-03-25 17:12:31 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 242,
+    "iid": 32,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "0"
+    },
+    "merge_status": "unchecked",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "feature-XX",
+    "source_project_id": 29,
+    "state_id": 1,
+    "target_branch": "developer",
+    "target_project_id": 29,
+    "time_estimate": 0,
+    "title": "Update README.md for testing merge to developer",
+    "updated_at": "2020-03-25 17:12:31 UTC",
+    "updated_by_id": null,
+    "url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test/-/merge_requests/32",
+    "source": {
+      "id": 29,
+      "name": "piloto-maven-test",
+      "description": "Piloto Java Maven Hello World con test",
+      "web_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+      "avatar_url": "https://des-gitlab.scae.redsara.es/uploads/-/system/project/avatar/29/mvn-java-tip-icon.png",
+      "git_ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "git_http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git",
+      "namespace": "Area-PILOTO",
+      "visibility_level": 0,
+      "path_with_namespace": "JAVA/PILOTO/piloto-maven-test",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+      "url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git"
+    },
+    "target": {
+      "id": 29,
+      "name": "piloto-maven-test",
+      "description": "Piloto Java Maven Hello World con test",
+      "web_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+      "avatar_url": "https://des-gitlab.scae.redsara.es/uploads/-/system/project/avatar/29/mvn-java-tip-icon.png",
+      "git_ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "git_http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git",
+      "namespace": "Area-PILOTO",
+      "visibility_level": 0,
+      "path_with_namespace": "JAVA/PILOTO/piloto-maven-test",
+      "default_branch": "master",
+      "ci_config_path": null,
+      "homepage": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test",
+      "url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "ssh_url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+      "http_url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test.git"
+    },
+    "last_commit": {
+      "id": "03c573a6a97cfc1179c61800a022d6d8b69a5aa6",
+      "message": "Update README.md",
+      "timestamp": "2020-03-25T18:11:40+01:00",
+      "url": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test/-/commit/03c573a6a97cfc1179c61800a022d6d8b69a5aa6",
+      "author": {
+        "name": "Jenkins-IC-PRE",
+        "email": "oficinatecnica.sgad@correo.gob.es"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "human_total_time_spent": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+
+    ],
+    "state": "opened",
+    "action": "open"
+  },
+  "labels": [
+
+  ],
+  "changes": {
+    "author_id": {
+      "previous": null,
+      "current": 2
+    },
+    "created_at": {
+      "previous": null,
+      "current": "2020-03-25 17:12:31 UTC"
+    },
+    "description": {
+      "previous": null,
+      "current": ""
+    },
+    "id": {
+      "previous": null,
+      "current": 242
+    },
+    "iid": {
+      "previous": null,
+      "current": 32
+    },
+    "merge_params": {
+      "previous": {
+      },
+      "current": {
+        "force_remove_source_branch": "0"
+      }
+    },
+    "source_branch": {
+      "previous": null,
+      "current": "feature-XX"
+    },
+    "source_project_id": {
+      "previous": null,
+      "current": 29
+    },
+    "target_branch": {
+      "previous": null,
+      "current": "developer"
+    },
+    "target_project_id": {
+      "previous": null,
+      "current": 29
+    },
+    "title": {
+      "previous": null,
+      "current": "Update README.md for testing merge to developer"
+    },
+    "updated_at": {
+      "previous": null,
+      "current": "2020-03-25 17:12:31 UTC"
+    },
+    "total_time_spent": {
+      "previous": null,
+      "current": 0
+    }
+  },
+  "repository": {
+    "name": "piloto-maven-test",
+    "url": "git@des-gitlab.scae.redsara.es:JAVA/PILOTO/piloto-maven-test.git",
+    "description": "Piloto Java Maven Hello World con test",
+    "homepage": "https://des-gitlab.scae.redsara.es/JAVA/PILOTO/piloto-maven-test"
+  }
+}
+
