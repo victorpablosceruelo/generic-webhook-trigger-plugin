@@ -46,14 +46,14 @@ public class JobNameTool {
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "opened", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer", resolvedVariables))) {
-      return "merge2integracion";
+      return "integracion_continua";
     }
 
     // 2) Merge request opened de developer-hotfix a hotfix.
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "opened", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer-hotfix", resolvedVariables))) {
-      return "merge2hotfix";
+      return "integracion_continua_hotfix";
     }
 
     // 3) Merge request opened pero no a developer o developer-hotfix.
@@ -88,14 +88,14 @@ public class JobNameTool {
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "merged", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer", resolvedVariables))) {
-      return "deploy2artifactory";
+      return "mr_a_developer_accepted";
     }
 
     // 3) Merge request merged de developer a developer-hotfix.
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
         && (valueForKeyIs("state_merge", "merged", resolvedVariables))
         && (valueForKeyIs("target_branch", "developer-hotfix", resolvedVariables))) {
-      return "deploy2artifactory";
+      return "mr_a_dev_hotfix_accepted";
     }
 
     if ((valueForKeyIs("object_kind", "merge_request", resolvedVariables))
