@@ -97,15 +97,6 @@ public class JenkinsGitlabAdHocWebhookTrigger extends GlobalConfiguration implem
   }
 
   @DataBoundSetter
-  public void setMetadataRepositoryUrl(final String metadataRepositoryUrl) {
-    this.metadataRepositoryUrl = metadataRepositoryUrl;
-  }
-
-  public String getMetadataRepositoryUrl() {
-    return metadataRepositoryUrl;
-  }
-
-  @DataBoundSetter
   public void setPrintContributedVariables(final boolean printContributedVariables) {
     this.printContributedVariables = printContributedVariables;
   }

@@ -140,7 +140,6 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
         JenkinsGitlabAdHocWebhookTrigger.get();
 
     String causeString = jenkinsGitlabAdHocWebhookTrigger.getCauseString();
-    String metadataRepositoryUrl = jenkinsGitlabAdHocWebhookTrigger.getMetadataRepositoryUrl();
 
     final Map<String, String> resolvedVariables =
         new VariablesResolver(
@@ -181,12 +180,6 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
       String fullErrorMsg = NO_JOBS_AFTER_FILTER_MSG + jobFullName;
       LOGGER.log(Level.WARNING, fullErrorMsg);
       return jsonResponse(404, fullErrorMsg);
-    }
-
-    if ((metadataRepositoryUrl != null) && (!metadataRepositoryUrl.trim().isEmpty())) {
-      JobsMetadata jobsMetadata = JobsMetadata.getInstance(metadataRepositoryUrl);
-      jobsMetadata.injectJobMetadataAsResolvedVariables(
-          jobFullNameWithoutTail, jobNameTail, resolvedVariables);
     }
 
     return invokeJobs(

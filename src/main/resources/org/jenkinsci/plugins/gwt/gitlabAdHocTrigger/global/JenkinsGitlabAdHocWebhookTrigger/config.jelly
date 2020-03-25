@@ -62,13 +62,6 @@
       </f:description>
     </f:entry>
 
-    <f:entry title="MetadataRepositoryUrl">
-      <f:textbox field="metadataRepositoryUrl" default=""/>
-      <f:description>
-       This is the url of the git repository where the metadata for all jobs is stored.
-      </f:description>
-    </f:entry>
-
     <f:entry title="Cause">
       <f:textbox field="causeString" default="Generic Cause"/>
       <f:description>
