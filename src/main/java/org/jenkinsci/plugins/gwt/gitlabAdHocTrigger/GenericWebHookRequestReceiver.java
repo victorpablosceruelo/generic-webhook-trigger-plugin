@@ -26,7 +26,6 @@ import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JenkinsGitlabAdHocWebhookTrigger;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.global.JobNameTool;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobfinder.JobFinder;
-import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.jobsMetadata.JobsMetadata;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.resolvers.VariablesResolver;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistException;
 import org.jenkinsci.plugins.gwt.gitlabAdHocTrigger.whitelist.WhitelistVerifier;

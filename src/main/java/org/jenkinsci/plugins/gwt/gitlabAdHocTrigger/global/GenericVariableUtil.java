@@ -50,6 +50,8 @@ public class GenericVariableUtil {
     toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
     toAdd.add(new GenericVariable("author_id", "$.object_attributes.author_id"));
     toAdd.add(new GenericVariable("user_name", "$.user.name"));
+    toAdd.add(new GenericVariable("homepage", "$.object_attributes.source.homepage"));
+    toAdd.add(new GenericVariable("title", "$.object_attributes.title"));
 
     return toAdd.toArray(new GenericVariable[0]);
   }
