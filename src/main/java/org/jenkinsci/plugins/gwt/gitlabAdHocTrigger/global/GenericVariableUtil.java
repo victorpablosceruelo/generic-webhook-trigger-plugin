@@ -47,11 +47,13 @@ public class GenericVariableUtil {
     toAdd.add(new GenericVariable("result_gitlab_url", "$.object_attributes.url"));
     toAdd.add(new GenericVariable("state_merge", "$.object_attributes.state"));
     toAdd.add(new GenericVariable("project_id", "$.project.id"));
-    toAdd.add(new GenericVariable("project_iid", "$.object_attributes.iid"));
     toAdd.add(new GenericVariable("author_id", "$.object_attributes.author_id"));
     toAdd.add(new GenericVariable("user_name", "$.user.name"));
     toAdd.add(new GenericVariable("homepage", "$.object_attributes.source.homepage"));
     toAdd.add(new GenericVariable("title", "$.object_attributes.title"));
+
+    toAdd.add(new GenericVariable("merge_request_id", "$.object_attributes.id"));
+    toAdd.add(new GenericVariable("merge_request_iid", "$.object_attributes.iid"));
 
     return toAdd.toArray(new GenericVariable[0]);
   }
