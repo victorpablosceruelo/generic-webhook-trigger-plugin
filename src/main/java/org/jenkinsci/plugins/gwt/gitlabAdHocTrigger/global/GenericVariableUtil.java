@@ -54,6 +54,8 @@ public class GenericVariableUtil {
 
     toAdd.add(new GenericVariable("merge_request_id", "$.object_attributes.id"));
     toAdd.add(new GenericVariable("merge_request_iid", "$.object_attributes.iid"));
+    
+    toAdd.add(new GenericVariable("JDK", "$.labels.[0].description"));
 
     return toAdd.toArray(new GenericVariable[0]);
   }
