@@ -36,9 +36,14 @@ public class JobNameTool {
 
   public String getJobNameTail(Map<String, String> resolvedVariables) {
 
-    // 1: Solo permitimos merge_requests:
+    if (valueForKeyIs("object_kind", "deploy_done", resolvedVariables)) {
+      return "deploy_done";
+    } 
+      
+    // A partir de aqui, solo permitimos merge_requests:
     if (!valueForKeyIs("object_kind", "merge_request", resolvedVariables)) {
-      return null;
+        printErrorGettingJobNameTail(resolvedVariables);
+        return null;
     }
 
     // Time to build job name tail ...
@@ -107,6 +112,11 @@ public class JobNameTool {
       return null;
     }
 
+    printErrorGettingJobNameTail(resolvedVariables);
+    return null;
+  }
+
+  private void printErrorGettingJobNameTail(Map<String, String> resolvedVariables) {
     StringBuilder sbErrorMsg = new StringBuilder();
     sbErrorMsg.append("No job name tail computed. object_kind=");
     sbErrorMsg.append(resolvedVariables.get("object_kind"));
@@ -116,9 +126,9 @@ public class JobNameTool {
     sbErrorMsg.append(resolvedVariables.get("target_branch"));
 
     LOGGER.log(Level.INFO, sbErrorMsg.toString());
-    return null;
   }
-
+  
+  
   private boolean valueForKeyIs(String key, String value, Map<String, String> resolvedVariables) {
     String currentValue = resolvedVariables.get(key);
     if (currentValue == null) {
