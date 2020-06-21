@@ -37,13 +37,19 @@ public class JobNameTool {
   public String getJobNameTail(Map<String, String> resolvedVariables) {
 
     if (valueForKeyIs("object_kind", "deploy_done", resolvedVariables)) {
-      return "deploy_done";
-    } 
-      
+      String environmentValue = resolvedVariables.get("environment");
+      if (environmentValue == null) {
+        printWarningNoEnvironmentSet(resolvedVariables);
+        return "deploy_done";
+      }
+
+      return "deploy_done_" + environmentValue;
+    }
+
     // A partir de aqui, solo permitimos merge_requests:
     if (!valueForKeyIs("object_kind", "merge_request", resolvedVariables)) {
-        printErrorGettingJobNameTail(resolvedVariables);
-        return null;
+      printErrorGettingJobNameTail(resolvedVariables);
+      return null;
     }
 
     // Time to build job name tail ...
@@ -116,6 +122,15 @@ public class JobNameTool {
     return null;
   }
 
+  private void printWarningNoEnvironmentSet(Map<String, String> resolvedVariables) {
+    StringBuilder sbErrorMsg = new StringBuilder();
+    sbErrorMsg.append("When using  object_kind=deploy_done  it is possible ");
+    sbErrorMsg.append("using environment=name to get a job named ");
+    sbErrorMsg.append("deploy_done_name, as deploy_done_preproduction");
+
+    LOGGER.log(Level.WARNING, sbErrorMsg.toString());
+  }
+
   private void printErrorGettingJobNameTail(Map<String, String> resolvedVariables) {
     StringBuilder sbErrorMsg = new StringBuilder();
     sbErrorMsg.append("No job name tail computed. object_kind=");
@@ -125,10 +140,9 @@ public class JobNameTool {
     sbErrorMsg.append(" and target_branch=");
     sbErrorMsg.append(resolvedVariables.get("target_branch"));
 
-    LOGGER.log(Level.INFO, sbErrorMsg.toString());
+    LOGGER.log(Level.WARNING, sbErrorMsg.toString());
   }
-  
-  
+
   private boolean valueForKeyIs(String key, String value, Map<String, String> resolvedVariables) {
     String currentValue = resolvedVariables.get(key);
     if (currentValue == null) {
@@ -139,11 +153,21 @@ public class JobNameTool {
   }
 
   public String getJobFullNameWithoutTail(Map<String, String> resolvedVariables) {
-    return resolvedVariables.get("project_path_with_namespace");
+    String project_path_with_namespace = resolvedVariables.get("project_path_with_namespace");
+    if ((project_path_with_namespace == null) || (project_path_with_namespace.isEmpty())) {
+      LOGGER.log(Level.WARNING, "Value for project_path_with_namespace is empty or null.");
+      return null;
+    }
+    return project_path_with_namespace;
   }
 
   public String computeJobFullName(String jobFullNameWithoutTail, String jobNameTail) {
-
+    if ((jobFullNameWithoutTail == null) || (jobFullNameWithoutTail.isEmpty())) {
+      return null;
+    }
+    if ((jobNameTail == null) || (jobNameTail.isEmpty())) {
+      return null;
+    }
     return jobFullNameWithoutTail + "/" + jobNameTail;
   }
 }

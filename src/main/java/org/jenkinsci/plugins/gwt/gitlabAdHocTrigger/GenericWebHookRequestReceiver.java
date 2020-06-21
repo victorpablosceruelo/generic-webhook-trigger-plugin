@@ -200,7 +200,7 @@ public class GenericWebHookRequestReceiver extends CrumbExclusion implements Unp
     for (FoundJob foundJob : foundJobsIn) {
       if (jobFullName.equalsIgnoreCase(foundJob.getFullName())) {
         foundJobsOut.add(foundJob);
-      } 
+      }
     }
     return foundJobsOut;
   }
